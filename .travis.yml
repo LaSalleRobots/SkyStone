@@ -5,7 +5,10 @@ android:
         - tools
         - platform-tools
         - tools
-                
+ignore:
+  - *.md
+  - *travis.yml
+
 before_install:
   - touch $HOME/.android/repositories.cfg
   - yes | sdkmanager "platforms;android-28"
