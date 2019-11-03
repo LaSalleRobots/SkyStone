@@ -1,0 +1,18 @@
+language: android
+dist: trusty
+android:
+    components:
+        - tools
+        - platform-tools
+        - tools
+ignore:
+  - *.md
+  - *travis.yml
+
+before_install:
+  - touch $HOME/.android/repositories.cfg
+  - yes | sdkmanager "platforms;android-28"
+  - yes | sdkmanager "build-tools;27.0.3"
+  
+script:
+    - ./gradlew build connectedCheck --stacktrace

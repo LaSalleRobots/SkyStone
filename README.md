@@ -1,37 +1,11 @@
-## Welcome to GitHub Pages
+## SkyStone Code
+Branch: master [![Build Status](https://travis-ci.com/LaSalleRobots/SkyStone.svg?branch=master)](https://travis-ci.com/LaSalleRobots/SkyStone)
 
-You can use the [editor on GitHub](https://github.com/LaSalleRobots/SkyStone/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Branch: aiBranch [![Build Status](https://travis-ci.com/LaSalleRobots/SkyStone.svg?branch=aiBranch)](https://travis-ci.com/LaSalleRobots/SkyStone)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Branch: driverBranch [![Build Status](https://travis-ci.com/LaSalleRobots/SkyStone.svg?branch=driverBranch)](https://travis-ci.com/LaSalleRobots/SkyStone)
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/LaSalleRobots/SkyStone/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+### Contribute
+Commit your code to the given branch (aiBranch or driverBranch) and submit a pull request when your code is ready to be merged into master.
+Please make sure your pull request is sufficiently documented describing what all will be added/removed. 
+**We will only merge code that is tested ok by Travis-CI**
