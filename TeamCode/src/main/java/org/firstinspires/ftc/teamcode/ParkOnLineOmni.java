@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Park On Line", group = "Linear OpMode")
+@Autonomous(name = "Park On Line Omni", group = "Autonomous")
 public class ParkOnLineOmni extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
