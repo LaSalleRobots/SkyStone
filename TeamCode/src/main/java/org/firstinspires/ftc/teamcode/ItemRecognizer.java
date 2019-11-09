@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.content.Context;
+
+import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -27,6 +30,9 @@ public class ItemRecognizer extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
+    boolean playing = false;
+    int soundID = -1;
+    double lastWidth = 0;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -87,11 +93,22 @@ public class ItemRecognizer extends LinearOpMode {
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
+
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
+
+                        if (updatedRecognitions.size() == 0) {lastWidth = 0;}
+
 
                         // step through the list of recognitions and display boundary info.
                         int i = 0;
                         for (Recognition recognition : updatedRecognitions) {
+
+                            if ( recognition.getLabel().equals("Skystone") && lastWidth != recognition.getWidth() ) {
+                                playSound("ss_laser");
+                                lastWidth = recognition.getWidth() + 850;
+                            }
+
+
                             telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                             telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                     recognition.getLeft(), recognition.getTop());
@@ -108,6 +125,26 @@ public class ItemRecognizer extends LinearOpMode {
             tfod.shutdown();
         }
     }
+    private void playSound(String soundName) {
+
+        Context myApp = hardwareMap.appContext;
+        SoundPlayer.PlaySoundParams params = new SoundPlayer.PlaySoundParams();
+        params.loopControl = 0;
+        params.waitForNonLoopingSoundsToFinish = true;
+
+        if (!playing) {
+            playing = true;
+            if ((soundID = myApp.getResources().getIdentifier(soundName, "raw", myApp.getPackageName())) != 0){
+                SoundPlayer.getInstance().startPlaying(myApp, soundID, params, null,
+                        new Runnable() {
+                            public void run() {
+                                playing = false;
+                            }} );
+            }
+
+        }
+    }
+
 
     /**
      * Initialize the Vuforia localization engine.
