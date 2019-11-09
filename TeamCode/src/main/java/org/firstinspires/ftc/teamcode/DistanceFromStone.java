@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.content.Context;
-
-import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -24,15 +21,16 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "Concept: TensorFlow Object Detection", group = "Autonomous")
+@Autonomous(name = "Distance From Phone", group = "Concept")
 //@Disabled
-public class ItemRecognizer extends LinearOpMode {
+public class DistanceFromStone extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
-    boolean playing = false;
-    int soundID = -1;
-    double lastWidth = 0;
+
+
+    private int sensorWidth = 3264;
+    private double focal = (507 * 60.96) / 20.32; // Precalibrated focal length
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -93,27 +91,43 @@ public class ItemRecognizer extends LinearOpMode {
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
-
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
-
-                        if (updatedRecognitions.size() == 0) {lastWidth = 0;}
-
 
                         // step through the list of recognitions and display boundary info.
                         int i = 0;
-                        for (Recognition recognition : updatedRecognitions) {
+                        int iter = 0;
 
-                            if ( recognition.getLabel().equals("Skystone") && lastWidth != recognition.getWidth() ) {
-                                playSound("ss_laser");
-                                lastWidth = recognition.getWidth() + 850;
+                        double[] importances = new double[updatedRecognitions.size()]; // the smaller the importance the more important it is
+                        for (Recognition recognition : updatedRecognitions) {
+                            // calculate the distance from the camera to the recognized object
+                            double distance = (((60.69 * focal) / recognition.getWidth()) * 0.27377245509);
+
+
+                            // Calculate the importance score
+                            importances[iter] = distance*0.1;
+                            if (recognition.getLabel().equals("Skystone")) {
+                                importances[iter] -= 1;
+                            } else {
+                                importances[iter] -= 0.5;
+                            }
+                            if (recognition.getLeft() < sensorWidth*2.0/8) {
+                                importances[iter] += 0.5;
+                            } else if (recognition.getLeft() > (sensorWidth*2.0/8) && recognition.getLeft() <= (sensorWidth*4.0/8) ) {
+                                importances[iter] -= 0.5;
+                            } else if (recognition.getLeft() > (sensorWidth*(4.0/8))) {
+                                importances[iter] += 0.5;
                             }
 
+                            //send object information to logging
 
                             telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.addData("  Distance:", distance);
+                            telemetry.addData("  Importance Score: ", importances[iter]);
                             telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                     recognition.getLeft(), recognition.getTop());
                             telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                     recognition.getRight(), recognition.getBottom());
+                            iter++;
                         }
                         telemetry.update();
                     }
@@ -125,26 +139,6 @@ public class ItemRecognizer extends LinearOpMode {
             tfod.shutdown();
         }
     }
-    private void playSound(String soundName) {
-
-        Context myApp = hardwareMap.appContext;
-        SoundPlayer.PlaySoundParams params = new SoundPlayer.PlaySoundParams();
-        params.loopControl = 0;
-        params.waitForNonLoopingSoundsToFinish = true;
-
-        if (!playing) {
-            playing = true;
-            if ((soundID = myApp.getResources().getIdentifier(soundName, "raw", myApp.getPackageName())) != 0){
-                SoundPlayer.getInstance().startPlaying(myApp, soundID, params, null,
-                        new Runnable() {
-                            public void run() {
-                                playing = false;
-                            }} );
-            }
-
-        }
-    }
-
 
     /**
      * Initialize the Vuforia localization engine.
