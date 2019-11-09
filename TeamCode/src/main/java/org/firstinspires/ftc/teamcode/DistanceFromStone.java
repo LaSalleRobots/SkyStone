@@ -21,12 +21,16 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "Distance From Phone", group = "Autonomous")
+@Autonomous(name = "Distance From Phone", group = "Concept")
 //@Disabled
 public class DistanceFromStone extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
+
+
+    private int sensorWidth = 3264;
+    private double focal = (507 * 60.96) / 20.32; // Precalibrated focal length
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -91,15 +95,39 @@ public class DistanceFromStone extends LinearOpMode {
 
                         // step through the list of recognitions and display boundary info.
                         int i = 0;
-                        double focal = (507 * 60.96) / 20.32;
+                        int iter = 0;
+
+                        double[] importances = new double[updatedRecognitions.size()]; // the smaller the importance the more important it is
                         for (Recognition recognition : updatedRecognitions) {
-                            double distance = ((60.69 * focal) / recognition.getWidth()) * 0.27377245509;
-                            telemetry.addData("Distance", distance);
+                            // calculate the distance from the camera to the recognized object
+                            double distance = (((60.69 * focal) / recognition.getWidth()) * 0.27377245509);
+
+
+                            // Calculate the importance score
+                            importances[iter] = distance*0.1;
+                            if (recognition.getLabel().equals("Skystone")) {
+                                importances[iter] -= 1;
+                            } else {
+                                importances[iter] -= 0.5;
+                            }
+                            if (recognition.getLeft() < sensorWidth*2.0/8) {
+                                importances[iter] += 0.5;
+                            } else if (recognition.getLeft() > (sensorWidth*2.0/8) && recognition.getLeft() <= (sensorWidth*4.0/8) ) {
+                                importances[iter] -= 0.5;
+                            } else if (recognition.getLeft() > (sensorWidth*(4.0/8))) {
+                                importances[iter] += 0.5;
+                            }
+
+                            //send object information to logging
+
                             telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.addData("  Distance:", distance);
+                            telemetry.addData("  Importance Score: ", importances[iter]);
                             telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                     recognition.getLeft(), recognition.getTop());
                             telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                     recognition.getRight(), recognition.getBottom());
+                            iter++;
                         }
                         telemetry.update();
                     }
