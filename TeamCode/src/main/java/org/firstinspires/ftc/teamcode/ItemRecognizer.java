@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.RecordPlayer;
 
 /**
  * This 2019-2020 OpMode illustrates the basics of using the TensorFlow Object Detection API to
@@ -30,9 +31,8 @@ public class ItemRecognizer extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
-    boolean playing = false;
-    int soundID = -1;
-    double lastWidth = 0;
+    private double lastWidth = 0;
+
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -85,6 +85,7 @@ public class ItemRecognizer extends LinearOpMode {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
+        RecordPlayer recordPlayer = new RecordPlayer(hardwareMap.appContext);
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
@@ -104,7 +105,7 @@ public class ItemRecognizer extends LinearOpMode {
                         for (Recognition recognition : updatedRecognitions) {
 
                             if ( recognition.getLabel().equals("Skystone") && lastWidth != recognition.getWidth() ) {
-                                playSound("ss_laser");
+                                recordPlayer.playSound("ss_laser");
                                 lastWidth = recognition.getWidth() + 850;
                             }
 
@@ -125,25 +126,7 @@ public class ItemRecognizer extends LinearOpMode {
             tfod.shutdown();
         }
     }
-    private void playSound(String soundName) {
 
-        Context myApp = hardwareMap.appContext;
-        SoundPlayer.PlaySoundParams params = new SoundPlayer.PlaySoundParams();
-        params.loopControl = 0;
-        params.waitForNonLoopingSoundsToFinish = true;
-
-        if (!playing) {
-            playing = true;
-            if ((soundID = myApp.getResources().getIdentifier(soundName, "raw", myApp.getPackageName())) != 0){
-                SoundPlayer.getInstance().startPlaying(myApp, soundID, params, null,
-                        new Runnable() {
-                            public void run() {
-                                playing = false;
-                            }} );
-            }
-
-        }
-    }
 
 
     /**
