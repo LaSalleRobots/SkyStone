@@ -157,8 +157,8 @@ public class ImageRecAuto extends LinearOpMode {
                         leftPower = 0.25;
                         rightPower = 0.25;
                     }
+                    recordPlayer.playSound("ss_wookie");
                 }
-
 
 
 
