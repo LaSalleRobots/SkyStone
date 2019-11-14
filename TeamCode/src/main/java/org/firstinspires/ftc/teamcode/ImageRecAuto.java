@@ -14,6 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.RecordPlayer;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * This 2019-2020 OpMode illustrates the basics of using the TensorFlow Object Detection API to
@@ -31,6 +33,7 @@ public class ImageRecAuto extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
+    private ElapsedTime runtime = new ElapsedTime();
     private double lastWidth = 0;
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
@@ -99,6 +102,7 @@ public class ImageRecAuto extends LinearOpMode {
         waitForStart();
         RecordPlayer recordPlayer = new RecordPlayer(hardwareMap.appContext);
 
+
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 if (tfod != null) {
@@ -137,7 +141,7 @@ public class ImageRecAuto extends LinearOpMode {
 
                 if (!foundSky) {
                     if (runtime.time() < 2 + x) {
-                        if (recognition.getLabel().equals("Skystone")) {
+                        if (recognitions.equals("Skystone")) {
                             foundSky = true;
                             x = runtime.time();
                         }
