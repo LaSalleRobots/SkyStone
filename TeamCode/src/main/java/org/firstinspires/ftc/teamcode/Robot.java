@@ -18,6 +18,13 @@ public class Robot {
     private DcMotor rightBack = null;
     private double power = 0.5;
 
+    private double countsPerMotor = 1440;
+    private double gearRatio = 1.0;
+    private double wheelDiameterCM = 123;
+    private double wheelDiameterIN = 123;
+    private double countsPerCM = (countsPerMotor * gearRatio) / (wheelDiameterCM * Math.PI);
+    private double countsPerIN = (countsPerMotor * gearRatio) / (wheelDiameterIN * Math.PI);
+
 
     //setup class initalizer
     public Robot (HardwareMap hardwareMap, ElapsedTime runtime) {
@@ -78,11 +85,37 @@ public class Robot {
         rightFront.setPower(0);
     }
 
-    public void moveForward () {
-        double time = runtime.time();
-        double initTime = time;
+    public void moveForward (int distance) {
+        //double time = runtime.time();
+        //double initTime = time;
 
-        while (time <= initTime+0.45) {
+        DcMotor.RunMode leftFrontPrev = leftFront.getMode();
+        DcMotor.RunMode rightFrontPrev = rightFront.getMode();
+        DcMotor.RunMode leftBackPrev = leftBack.getMode();
+        DcMotor.RunMode rightBackPrev = rightBack.getMode();
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        int leftFrontTarget = leftFront.getCurrentPosition() + (int)(distance * countsPerCM);
+        int rightFrontTarget = rightFront.getCurrentPosition() + (int)(distance * countsPerCM);
+        int leftBackTarget = leftBack.getCurrentPosition() + (int)(distance * countsPerCM);
+        int rightBackTarget = rightBack.getCurrentPosition() + (int)(distance * countsPerCM);
+
+        leftFront.setTargetPosition(leftFrontTarget);
+        rightFront.setTargetPosition(rightFrontTarget);
+        leftBack.setTargetPosition(leftBackTarget);
+        rightBack.setTargetPosition(rightBackTarget);
+
+
+        leftFront.setMode(leftFrontPrev);
+        rightFront.setMode(rightFrontPrev);
+        leftBack.setMode(leftBackPrev);
+        rightBack.setMode(rightBackPrev);
+
+        /*while (time <= initTime+0.45) {
             leftFront.setPower(power);
             leftBack.setPower(power);
             rightBack.setPower(power);
@@ -93,7 +126,7 @@ public class Robot {
         leftBack.setPower(0);
         leftFront.setPower(0);
         rightBack.setPower(0);
-        rightFront.setPower(0);
+        rightFront.setPower(0); */
     }
 
     public void moveBackward () {
@@ -155,6 +188,10 @@ public class Robot {
 
     public void setPower(double power) {
         this.power = power;
+        leftFront.setPower(power);
+        leftBack.setPower(power);
+        rightBack.setPower(power);
+        rightFront.setPower(power);
     }
 
 

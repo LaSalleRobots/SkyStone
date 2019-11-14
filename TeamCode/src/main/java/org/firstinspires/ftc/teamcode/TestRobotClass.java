@@ -23,7 +23,7 @@ public class TestRobotClass extends LinearOpMode {
         Robot robot = new Robot(hardwareMap, runtime);
 
         if (opModeIsActive()) {
-            robot.moveForward();
+            robot.moveForward(10);
             robot.rotateLeft();
             robot.rotateRight();
             robot.sleep(15);
