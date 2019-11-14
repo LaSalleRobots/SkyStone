@@ -70,7 +70,7 @@ public class ImageRecAuto extends LinearOpMode {
         rightDrive = hardwareMap.get(DcMotor.class, "right");
 
         boolean foundSky = false;
-        int i = 0;
+        int x = 0;
 
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -136,24 +136,24 @@ public class ImageRecAuto extends LinearOpMode {
                 double rightPower = 0;
 
                 if (!foundSky) {
-                    if (runtime.time() < 2 + i) {
+                    if (runtime.time() < 2 + x) {
                         if (recognition.getLabel().equals("Skystone")) {
                             foundSky = true;
-                            i = runtime.time()
+                            x = runtime.time();
                         }
                     }
-                    if (runtime.time() < 4 + i) {
+                    if (runtime.time() < 4 + x) {
                         leftPower = 0.25;
                         rightPower = 0.25;
-                        i += 4;
+                        x += 4;
                     }
                 }
                 else {
-                    if (runtime.time() < 2 + i) {
+                    if (runtime.time() < 2 + x) {
                         leftPower = 0.25;
                         rightPower = -0.25;
                     }
-                    if (runtime.time() < 4 + i) {
+                    if (runtime.time() < 4 + x) {
                         leftPower = 0.25;
                         rightPower = 0.25;
                     }
