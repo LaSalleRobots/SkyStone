@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -73,7 +75,8 @@ public class ImageRecAuto extends LinearOpMode {
         rightDrive = hardwareMap.get(DcMotor.class, "right");
 
         boolean foundSky = false;
-        int x = 0;
+        double x = 0;
+        x = runtime.time();
 
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -105,7 +108,7 @@ public class ImageRecAuto extends LinearOpMode {
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-                ArrayList<String> recognitions = new ArayList<String>();
+                ArrayList<String> recognitions = new ArrayList<String>();
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
@@ -121,9 +124,10 @@ public class ImageRecAuto extends LinearOpMode {
                         int i = 0;
                         for (Recognition recognition : updatedRecognitions) {
 
-                            if ( recognition.getLabel().equals("Skystone") && lastWidth != recognition.getWidth() ) {
+                            if ( recognition.getLabel().equals("Skystone") ) {
                                 recordPlayer.playSound("ss_laser");
-                                lastWidth = recognition.getWidth() + 850;
+                                foundSky = true;
+                                x = runtime.time();
                             }
 
 
@@ -141,13 +145,7 @@ public class ImageRecAuto extends LinearOpMode {
                 double rightPower = 0;
 
                 if (!foundSky) {
-                    if (runtime.time() < 2 + x) {
-                        if (recognitions.equals("Skystone")) {
-                            foundSky = true;
-                            x = runtime.time();
-                        }
-                    }
-                    if (runtime.time() < 4 + x) {
+                    if (runtime.time() > 2 && runtime.time() < 4 + x) {
                         leftPower = 0.25;
                         rightPower = 0.25;
                         x += 4;
