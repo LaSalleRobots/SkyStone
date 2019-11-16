@@ -37,6 +37,8 @@ public class ParkOnLine extends LinearOpMode {
             double rightPower = 0;
 
             if (runtime.time() < 0.45) {
+                clawLeft.setPosition(0);
+                clawRight.setPosition(1);
                 leftPower = 0.5;
                 rightPower = 0.5;
             }
