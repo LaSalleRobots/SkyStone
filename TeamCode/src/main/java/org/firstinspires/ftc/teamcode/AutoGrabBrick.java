@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Auto Plate Test", group = "Autonomous")
-public class AutoPlateTest extends LinearOpMode {
+@Autonomous(name="Auto Grab Brick", group = "Autonomous")
+public class AutoGrabBrick extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
