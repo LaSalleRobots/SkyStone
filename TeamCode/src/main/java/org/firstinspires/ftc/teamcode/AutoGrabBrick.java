@@ -38,27 +38,27 @@ public class AutoGrabBrick extends LinearOpMode {
             double leftPower = 0;
             double rightPower = 0;
 
-            if (runtime.time() < 2) {
+            if (runtime.time() < 1) {
                 leftPower = 1f;
                 rightPower = 1f;
             }
-            else if (runtime.time() < 4) {
+            else if (runtime.time() < 1.5) {
                 leftPower = -0.8;
                 rightPower = 0.8;
             }
-            else if (runtime.time() < 5) {
+            else if (runtime.time() < 2.5) {
                 leftPower = 0.5;
                 rightPower = 0.5;
             }
-            else if (runtime.time() < 6) {
+            else if (runtime.time() < 4.5) {
                 leftPower = -1f;
                 rightPower = 1f;
             }
-            else if (runtime.time() < 7.5) {
+            else if (runtime.time() < 7) {
                 leftPower = 1;
                 rightPower = -1;
             }
-            else if (runtime.time() < 10.5) {
+            else if (runtime.time() < 10) {
                 leftPower = 1;
                 rightPower = 1;
             }
