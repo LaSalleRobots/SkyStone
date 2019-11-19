@@ -1,3 +1,9 @@
+/*  GRAB-E (v3 Robot)
+ *
+ *
+ */
+
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -8,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Park On Line STUDIO", group = "Autonomous")
+@Autonomous(name="Park On Line", group = "Linear OpMode")
 public class ParkOnLine extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
@@ -36,9 +42,7 @@ public class ParkOnLine extends LinearOpMode {
             double leftPower = 0;
             double rightPower = 0;
 
-            if (runtime.time() < 0.45) {
-                clawLeft.setPosition(0);
-                clawRight.setPosition(1);
+            if (runtime.time() < 2) {
                 leftPower = 0.5;
                 rightPower = 0.5;
             }

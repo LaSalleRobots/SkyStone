@@ -1,3 +1,9 @@
+/*  WALL-E (v4 Robot)
+ *
+ *
+ */
+
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -8,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name = "Park On Line Omni", group = "Autonomous")
+@Autonomous(name = "Park On Line Omni Drive", group = "Autonomous")
 public class ParkOnLineOmni extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
