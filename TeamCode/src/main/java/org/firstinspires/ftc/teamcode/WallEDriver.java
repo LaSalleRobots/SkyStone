@@ -28,6 +28,7 @@ public class WallEDriver extends LinearOpMode {
 
     //Setup claw servos variables
     private Servo plateGrabber = null;
+    private Servo plateGrabber2 = null;
     private Servo clawLeft = null;
     private Servo clawRight = null;
     private Servo clawRotate = null;
@@ -51,6 +52,7 @@ public class WallEDriver extends LinearOpMode {
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
+        plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
 
         //Set Directions
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -61,6 +63,7 @@ public class WallEDriver extends LinearOpMode {
 
         waitForStart();
         plateGrabber.setPosition(0);
+        plateGrabber2.setPosition(1);
         closedMover = true;
         runtime.reset();
         while (opModeIsActive()) {
@@ -83,10 +86,12 @@ public class WallEDriver extends LinearOpMode {
 
     public void toggleClaw() {
         if (closedMover) {
-            plateGrabber.setPosition(0.9);
+            plateGrabber.setPosition(1);
+            plateGrabber2.setPosition(0);
             closedMover = false;
         } else {
             plateGrabber.setPosition(0);
+            plateGrabber2.setPosition(1);
             closedMover = true;
         }
     }
