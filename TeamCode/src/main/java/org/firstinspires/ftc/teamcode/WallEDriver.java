@@ -27,6 +27,7 @@ public class WallEDriver extends LinearOpMode {
     private DcMotor armRight = null;
 
     //Setup claw servos variables
+    private Servo plateGrabber = null;
     private Servo clawLeft = null;
     private Servo clawRight = null;
     private Servo clawRotate = null;
@@ -35,6 +36,8 @@ public class WallEDriver extends LinearOpMode {
     double rightFrontPower = 0.5;
     double leftBackPower = 0.5;
     double rightBackPower = 0.5;
+
+    boolean closedMover = false;
 
 
     @Override
@@ -47,6 +50,7 @@ public class WallEDriver extends LinearOpMode {
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
 
         //Set Directions
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -56,6 +60,8 @@ public class WallEDriver extends LinearOpMode {
 
 
         waitForStart();
+        plateGrabber.setPosition(0);
+        closedMover = true;
         runtime.reset();
         while (opModeIsActive()) {
             if (gamepad1.dpad_up) {moveForwards();}
@@ -64,6 +70,7 @@ public class WallEDriver extends LinearOpMode {
             else if (gamepad1.dpad_right) {moveRight();}
             else if (gamepad1.a) {rotateLeft();}
             else if (gamepad1.b) {rotateRight();}
+            else if (gamepad1.left_bumper) {toggleClaw();}
             else {zeroMove();}
 
             leftFront.setPower(leftFrontPower);
@@ -74,6 +81,15 @@ public class WallEDriver extends LinearOpMode {
 
     }
 
+    public void toggleClaw() {
+        if (closedMover) {
+            plateGrabber.setPosition(0.9);
+            closedMover = false;
+        } else {
+            plateGrabber.setPosition(0);
+            closedMover = true;
+        }
+    }
 
     public void moveForwards() {
         rightFrontPower = -1;
