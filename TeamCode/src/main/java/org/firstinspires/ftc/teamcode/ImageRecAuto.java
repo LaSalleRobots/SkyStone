@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -19,6 +21,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.RecordPlayer;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * This 2019-2020 OpMode illustrates the basics of using the TensorFlow Object Detection API to
@@ -30,13 +34,16 @@ import org.firstinspires.ftc.teamcode.RecordPlayer;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "Concept: TensorFlow Object Detection", group = "Autonomous")
+@Autonomous(name = "Image Rec Auto", group = "Autonomous")
 //@Disabled
-public class ItemRecognizer extends LinearOpMode {
+public class ImageRecAuto extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
+    private ElapsedTime runtime = new ElapsedTime();
     private double lastWidth = 0;
+    private DcMotor leftDrive = null;
+    private DcMotor rightDrive = null;
 
 
     /*
@@ -68,6 +75,17 @@ public class ItemRecognizer extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+        leftDrive = hardwareMap.get(DcMotor.class, "left");
+        rightDrive = hardwareMap.get(DcMotor.class, "right");
+
+        boolean foundSky = false;
+        double x = 0;
+        x = runtime.time();
+
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -92,8 +110,10 @@ public class ItemRecognizer extends LinearOpMode {
         waitForStart();
         RecordPlayer recordPlayer = new RecordPlayer(hardwareMap.appContext);
 
+
         if (opModeIsActive()) {
             while (opModeIsActive()) {
+                ArrayList<String> recognitions = new ArrayList<String>();
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
@@ -109,9 +129,10 @@ public class ItemRecognizer extends LinearOpMode {
                         int i = 0;
                         for (Recognition recognition : updatedRecognitions) {
 
-                            if ( recognition.getLabel().equals("Skystone") && lastWidth != recognition.getWidth() ) {
+                            if ( recognition.getLabel().equals("Skystone") ) {
                                 recordPlayer.playSound("ss_laser");
-                                lastWidth = recognition.getWidth() + 850;
+                                foundSky = true;
+                                x = runtime.time();
                             }
 
 
@@ -124,6 +145,34 @@ public class ItemRecognizer extends LinearOpMode {
                         telemetry.update();
                     }
                 }
+
+                double leftPower = 0;
+                double rightPower = 0;
+
+                if (!foundSky) {
+                    if (runtime.time() > 2 && runtime.time() < 4 + x) {
+                        leftPower = 0.25;
+                        rightPower = 0.25;
+                        x += 4;
+                    }
+                }
+                else {
+                    if (runtime.time() < 2 + x) {
+                        leftPower = 0.25;
+                        rightPower = -0.25;
+                    }
+                    if (runtime.time() < 4 + x) {
+                        leftPower = 0.25;
+                        rightPower = 0.25;
+                    }
+                    recordPlayer.playSound("ss_wookie");
+                }
+
+
+
+                leftDrive.setPower(leftPower);
+                rightDrive.setPower(rightPower);
+
             }
         }
 
