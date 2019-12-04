@@ -21,11 +21,11 @@ public class TestRobotClass extends LinearOpMode {
         telemetry.update();
 
         Robot robot = new Robot(hardwareMap, runtime);
+        robot.setPower(1);
 
         if (opModeIsActive()) {
             robot.moveForward(10);
-            robot.rotateLeft();
-            robot.rotateRight();
+            robot.moveBackward(10);
             robot.sleep(15);
         }
 
