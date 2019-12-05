@@ -19,11 +19,11 @@ public class Robot {
     private double power = 0.5;
 
     private double countsPerMotor = 1440;
-    private double gearRatio = 1.0;
-    private double wheelDiameterCM = 123;
-    private double wheelDiameterIN = 123;
-    private double countsPerCM = (countsPerMotor * gearRatio) / (wheelDiameterCM * Math.PI);
-    private double countsPerIN = (countsPerMotor * gearRatio) / (wheelDiameterIN * Math.PI);
+    private double gearRatio = 60.0;
+    private double wheelDiameterCM = 8;
+    private double wheelDiameterIN = 3.25;
+    private double countsPerCM = (countsPerMotor / gearRatio) / (wheelDiameterCM * Math.PI);
+    private double countsPerIN = (countsPerMotor / gearRatio) / (wheelDiameterIN * Math.PI);
 
 
     //setup class initalizer
@@ -38,10 +38,11 @@ public class Robot {
         this.rightBack = hardwareMap.get(DcMotor.class, "rightBack");
 
 
-        this.leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        this.leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         this.rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
         this.leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
+
 
     }
 
@@ -86,9 +87,71 @@ public class Robot {
     }
 
     public void moveForward (int distance) {
-        //double time = runtime.time();
-        //double initTime = time;
 
+
+
+        int leftFrontTarget = leftFront.getCurrentPosition() + (int)(distance * countsPerCM);
+        int rightFrontTarget = rightFront.getCurrentPosition() + (int)(distance * countsPerCM);
+        int leftBackTarget = leftBack.getCurrentPosition() + (int)(distance * countsPerCM);
+        int rightBackTarget = rightBack.getCurrentPosition() + (int)(distance * countsPerCM);
+
+        leftFront.setTargetPosition(leftFrontTarget);
+        rightFront.setTargetPosition(rightFrontTarget);
+        leftBack.setTargetPosition(leftBackTarget);
+        rightBack.setTargetPosition(rightBackTarget);
+
+    }
+
+    public void moveBackward (double distance) {
+
+
+
+        int leftFrontTarget = leftFront.getCurrentPosition() + (int)(distance * countsPerCM);
+        int rightFrontTarget = rightFront.getCurrentPosition() + (int)(distance * countsPerCM);
+        int leftBackTarget = leftBack.getCurrentPosition() + (int)(distance * countsPerCM);
+        int rightBackTarget = rightBack.getCurrentPosition() + (int)(distance * countsPerCM);
+
+        leftFront.setTargetPosition(-leftFrontTarget);
+        rightFront.setTargetPosition(-rightFrontTarget);
+        leftBack.setTargetPosition(-leftBackTarget);
+        rightBack.setTargetPosition(-rightBackTarget);
+
+
+
+    }
+
+    public void moveRight(double distance) {
+        DcMotor.RunMode leftFrontPrev = leftFront.getMode();
+        DcMotor.RunMode rightFrontPrev = rightFront.getMode();
+        DcMotor.RunMode leftBackPrev = leftBack.getMode();
+        DcMotor.RunMode rightBackPrev = rightBack.getMode();
+
+
+
+        int leftFrontTarget = leftFront.getCurrentPosition() + (int)(distance * countsPerCM);
+        int rightFrontTarget = rightFront.getCurrentPosition() + (int)(distance * countsPerCM);
+        int leftBackTarget = leftBack.getCurrentPosition() + (int)(distance * countsPerCM);
+        int rightBackTarget = rightBack.getCurrentPosition() + (int)(distance * countsPerCM);
+
+        leftFront.setTargetPosition(leftFrontTarget);
+        rightFront.setTargetPosition(rightFrontTarget);
+        leftBack.setTargetPosition(leftBackTarget);
+        rightBack.setTargetPosition(rightBackTarget);
+
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        leftFront.setMode(leftFrontPrev);
+        rightFront.setMode(rightFrontPrev);
+        leftBack.setMode(leftBackPrev);
+        rightBack.setMode(rightBackPrev);
+    }
+
+    public void moveLeft(double distance) {
         DcMotor.RunMode leftFrontPrev = leftFront.getMode();
         DcMotor.RunMode rightFrontPrev = rightFront.getMode();
         DcMotor.RunMode leftBackPrev = leftBack.getMode();
@@ -114,75 +177,6 @@ public class Robot {
         rightFront.setMode(rightFrontPrev);
         leftBack.setMode(leftBackPrev);
         rightBack.setMode(rightBackPrev);
-
-        /*while (time <= initTime+0.45) {
-            leftFront.setPower(power);
-            leftBack.setPower(power);
-            rightBack.setPower(power);
-            rightFront.setPower(power);
-            time = runtime.time();
-        }
-
-        leftBack.setPower(0);
-        leftFront.setPower(0);
-        rightBack.setPower(0);
-        rightFront.setPower(0); */
-    }
-
-    public void moveBackward () {
-        double time = runtime.time();
-        double initTime = time;
-
-        while (time <= initTime+0.45) {
-            leftFront.setPower(-power);
-            leftBack.setPower(-power);
-            rightBack.setPower(-power);
-            rightFront.setPower(-power);
-            time = runtime.time();
-        }
-
-        leftBack.setPower(0);
-        leftFront.setPower(0);
-        rightBack.setPower(0);
-        rightFront.setPower(0);
-    }
-
-    public void moveRight() {
-        double time = runtime.time();
-        double initTime = time;
-
-        while (time <= initTime+0.45) {
-            leftFront.setPower(power);
-            leftBack.setPower(-power);
-            rightFront.setPower(-power);
-            rightBack.setPower(0.5);
-            time = runtime.time();
-
-        }
-
-        leftBack.setPower(0);
-        leftFront.setPower(0);
-        rightBack.setPower(0);
-        rightFront.setPower(0);
-    }
-
-    public void moveLeft() {
-        double time = runtime.time();
-        double initTime = time;
-
-        while (time <= initTime+0.45) {
-            leftFront.setPower(-power);
-            leftBack.setPower(power);
-            rightFront.setPower(power);
-            rightBack.setPower(-power);
-            time = runtime.time();
-
-        }
-
-        leftBack.setPower(0);
-        leftFront.setPower(0);
-        rightBack.setPower(0);
-        rightFront.setPower(0);
     }
 
 
