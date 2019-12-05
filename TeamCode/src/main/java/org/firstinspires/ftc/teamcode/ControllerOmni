@@ -68,12 +68,19 @@ public class ControllerOmni extends LinearOpMode {
         closedMover = true;
         runtime.reset();
         while (opModeIsActive()) {
-            double y = 2*Math.round(gamepad1.left_stick_y*2);
-            double x = 2*Math.round(gamepad1.left_stick_x*2);
-            if (x >= 0.5 && x > 0 && y < 0.5 && y >= 0){moveRight()}
-            else if (x <= -0.5 && x < 0 && y < 0.5 && y >= 0){moveLeft();}
-            else if (x < 0.5 && x >= 0 && y >= 0.5 && y > 0){moveForwards();}
-            else if (x < 0.5 && x >= 0 && y <= -0.5 && y < 0){moveForwards();}
+            double y = gamepad1.left_stick_y;
+            double x = gamepad1.left_stick_x;
+            if (x > 0 && y < 0.25 && y > -0.25){moveRight()}
+            else if (x < 0 && y < 0.25 && y > -0.25){moveLeft();}
+            else if (y > 0 && x < 0.25 && x > -0.25){moveForwards();}
+            else if (y < 0 && x < 0.25 && x > -0.25){moveForwards();}
+
+            else if (y > 0.25 && x < -0.25){moveForwardsLeft();}
+            else if (y > 0.25 && x > 0.25){moveForwardsRight();}
+            else if (y < -0.25 && x < -0.25){moveBackwardsLeft();}
+            else if (y < -0.25 && x > 0.25){moveBackwardsRight();}
+
+            else {zeroMove();}
 
             leftFront.setPower(leftFrontPower);
             rightFront.setPower(rightFrontPower);
@@ -121,6 +128,34 @@ public class ControllerOmni extends LinearOpMode {
         rightBackPower = 1;
 
         leftFrontPower = 1;
+        leftBackPower = 1;
+    }
+    public void moveForwardsLeft() {
+        rightFrontPower = -1;
+        rightBackPower = 0;
+
+        leftFrontPower = 0;
+        leftBackPower = -1;
+    }
+    public void moveForwardsRight() {
+        rightFrontPower = 0;
+        rightBackPower = 1;
+
+        leftFrontPower = 1;
+        leftBackPower = 0;
+    }
+    public void moveBackwardsLeft() {
+        rightFrontPower = 0;
+        rightBackPower = -1;
+
+        leftFrontPower = -1;
+        leftBackPower = 0;
+    }
+    public void moveBackwardsRight() {
+        rightFrontPower = 1;
+        rightBackPower = 0;
+
+        leftFrontPower = 0;
         leftBackPower = 1;
     }
     public void zeroMove() {
