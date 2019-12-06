@@ -168,11 +168,16 @@ public class TrueWallE extends LinearOpMode {
                         for (Recognition recognition : updatedRecognitions) {
                             double distance = (((60.69 * focal) / recognition.getWidth()) * 0.27377245509);
                             double boxX = recognition.getWidth()/2;
-                            double boxY = recognition.getHeight()/2;
                             double centerX = recognition.getImageWidth()/2;
                             double centerY = recognition.getImageHeight()/2;
+                            double boxMid = recognition.getLeft() + boxX;
                             if (recognition.getLabel().equals("Skystone")) {
-                                if (boxX)
+                                if (boxMid < centerX) {
+                                    moveLeft();
+                                }
+                                else if (boxMid > centerX) {
+                                    moveRight();
+                                }
                             }
                         }
 
