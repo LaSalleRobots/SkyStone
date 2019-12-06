@@ -23,11 +23,11 @@ public class RoboHelper {
 
 
     private double power = 0.5;
-    double leftFrontPower = 0.5;
-    double rightFrontPower = 0.5;
-    double leftBackPower = 0.5;
-    double rightBackPower = 0.5;
-    boolean closedMover = false;
+    public double leftFrontPower = 0.5;
+    public double rightFrontPower = 0.5;
+    public double leftBackPower = 0.5;
+    public double rightBackPower = 0.5;
+    public boolean closedMover = false;
 
     //setup class initializer
     public RoboHelper (HardwareMap hardwareMap, ElapsedTime runtime) {
