@@ -97,28 +97,47 @@ public class TrueWallE extends LinearOpMode {
             //insert move plate between
             //begin
             while (runtime.time() < 14){
+                if (runtime.time() < 1) {
+                    rightFrontPower = -1;
+                    rightBackPower = -1;
 
-                if (runtime.time() < 2) {
+                    leftFrontPower = -1;
+                    leftBackPower = -1;
+                }
+
+                if (runtime.time() < 3) {
                     rightFrontPower = 1;
                     rightBackPower = -1;
 
                     leftFrontPower = -1;
                     leftBackPower = 1;
                 }
-                else if (runtime.time() < 4) {
+                else if (runtime.time() < 5) {
                     plateGrabber.setPosition(1);
                     plateGrabber2.setPosition(0);
+
+                    rightFrontPower = 0;
+                    rightBackPower = 0;
+
+                    leftFrontPower = 0;
+                    leftBackPower = 0;
                 }
-                else if (runtime.time() < 6) {
+                else if (runtime.time() < 7) {
                     rightFrontPower = -1;
                     rightBackPower = 1;
 
                     leftFrontPower = 1;
                     leftBackPower = -1;
                 }
-                else if (runtime.time() < 8) {
+                else if (runtime.time() < 9) {
                     plateGrabber.setPosition(0);
                     plateGrabber2.setPosition(1);
+
+                    rightFrontPower = 0;
+                    rightBackPower = 0;
+
+                    leftFrontPower = 0;
+                    leftBackPower = 0;
                 }
                 else {
                     rightFrontPower = -1;
