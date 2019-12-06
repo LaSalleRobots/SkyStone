@@ -29,6 +29,7 @@ public class TrueWallE extends LinearOpMode {
 
     private int sensorWidth = 3264;
     private double focal = (507 * 60.96) / 20.32; // Precalibrated focal length
+    private int safeZone = 50; // the safezone for getting the bricks centered
 
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -146,16 +147,10 @@ public class TrueWallE extends LinearOpMode {
                     leftFrontPower = -1;
                     leftBackPower = -1;
                 }
-
-
                 applyPower();
-
             }
 
-            leftFront.setPower(0);
-            rightFront.setPower(0);
-            leftBack.setPower(0);
-            rightBack.setPower(0);
+            powerOff();
 
 
 
@@ -170,18 +165,33 @@ public class TrueWallE extends LinearOpMode {
                         int iter = 0;
                         double[] importances = new double[updatedRecognitions.size()];
                         for (Recognition recognition : updatedRecognitions) {
-                            double distance = (((60.69 * focal) / recognition.getWidth()) * 0.27377245509);
-                            double boxX = recognition.getWidth()/2;
-                            double centerX = recognition.getImageWidth()/2;
-                            double centerY = recognition.getImageHeight()/2;
-                            double boxMid = recognition.getLeft() + boxX;
+                            double distance = (((60.69 * focal) / recognition.getWidth()) * 0.27377245509); // Distance from position
+                            double boxX = recognition.getWidth()/2; // The mid-position for the recignized bounding box width
+                            double centerX = recognition.getImageWidth()/2; // the mid-position for the frame box width
+                            double centerY = recognition.getImageHeight()/2; // the mid-position for the frame box height
+                            double boxMid = recognition.getLeft() + boxX; // Center point Horizontally
+
+                            //Action and logic
                             if (recognition.getLabel().equals("Skystone")) {
-                                if (boxMid < centerX) {
-                                    moveLeft();
+                                //Make sure to use tolerances for comparison
+
+
+                                //Are we not in the safe zone?
+                                if (!(boxMid+safeZone <= centerX && boxMid-safeZone >= centerX)) {
+                                    // we are not in the safe zone of 50px
+                                    if (boxMid < centerX ) {
+                                        // the box is to our right so we need to move left
+                                        moveLeft();
+                                    }
+                                    else if (boxMid > centerX) {
+                                        // the box is to our left so we need to move right
+                                        moveRight();
+                                    }
                                 }
-                                else if (boxMid > centerX) {
-                                    moveRight();
+                                else { // we are in the safe zone
+                                    moveForwards();
                                 }
+
                             }
                             applyPower();
                             telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
@@ -232,6 +242,12 @@ public class TrueWallE extends LinearOpMode {
         }
     }
 
+    public void powerOff() {
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+    }
     public void applyPower() {
         leftFront.setPower(leftFrontPower);
         rightFront.setPower(rightFrontPower);
