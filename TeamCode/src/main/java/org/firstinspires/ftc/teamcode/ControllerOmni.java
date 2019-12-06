@@ -96,14 +96,12 @@ public class ControllerOmni extends LinearOpMode {
     }
 
     public void toggleClaw() {
-        if (closedMover) {
+        if (plateGrabber.getPosition() < 0.2) {
             plateGrabber.setPosition(0.8);
             plateGrabber2.setPosition(0.2);
-            closedMover = false;
-        } else {
+        } else if (plateGrabber.getPosition() > 0.8) {
             plateGrabber.setPosition(0.2);
             plateGrabber2.setPosition(0.8);
-            closedMover = true;
         }
     }
 
