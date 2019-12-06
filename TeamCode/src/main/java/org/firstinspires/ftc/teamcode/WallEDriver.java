@@ -80,6 +80,11 @@ public class WallEDriver extends LinearOpMode {
             rightFront.setPower(rightFrontPower);
             leftBack.setPower(leftBackPower);
             rightBack.setPower(rightBackPower);
+
+            telemetry.addData("grabber1:", plateGrabber.getPosition());
+            telemetry.addData("grabber2:", plateGrabber.getPosition());
+
+            telemetry.update();
         }
 
     }
