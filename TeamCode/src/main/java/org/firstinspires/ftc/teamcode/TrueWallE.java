@@ -129,10 +129,14 @@ public class TrueWallE extends LinearOpMode {
                 }
 
 
-                leftDrive.setPower(leftPower);
-                rightDrive.setPower(rightPower);
+                applyPower();
 
             }
+
+            leftFront.setPower(0);
+            rightFront.setPower(0);
+            leftBack.setPower(0);
+            rightBack.setPower(0);
 
 
 
@@ -160,8 +164,10 @@ public class TrueWallE extends LinearOpMode {
                                     moveRight();
                                 }
                             }
+                            applyPower();
+                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.update();
                         }
-
                     }
                 }
             }
@@ -205,6 +211,13 @@ public class TrueWallE extends LinearOpMode {
             plateGrabber2.setPosition(1);
             closedMover = true;
         }
+    }
+
+    public void applyPower() {
+        leftFront.setPower(leftFrontPower);
+        rightFront.setPower(rightFrontPower);
+        leftBack.setPower(leftBackPower);
+        rightBack.setPower(rightBackPower);
     }
 
     public void moveForwards() {
