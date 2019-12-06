@@ -166,7 +166,7 @@ public class TrueWallE extends LinearOpMode {
                         double[] importances = new double[updatedRecognitions.size()];
                         for (Recognition recognition : updatedRecognitions) {
                             double distance = (((60.69 * focal) / recognition.getWidth()) * 0.27377245509); // Distance from position
-                            double boxX = recognition.getWidth()/2; // The mid-position for the recignized bounding box width
+                            double boxX = recognition.getWidth()/2; // The mid-position for the recognized bounding box width
                             double centerX = recognition.getImageWidth()/2; // the mid-position for the frame box width
                             double centerY = recognition.getImageHeight()/2; // the mid-position for the frame box height
                             double boxMid = recognition.getLeft() + boxX; // Center point Horizontally
@@ -178,7 +178,7 @@ public class TrueWallE extends LinearOpMode {
 
                                 //Are we not in the safe zone?
                                 if (!(boxMid+safeZone <= centerX && boxMid-safeZone >= centerX)) {
-                                    // we are not in the safe zone of 50px
+                                    // we are not in the safe zone of whatever var saveZone px
                                     if (boxMid < centerX ) {
                                         // the box is to our right so we need to move left
                                         moveLeft();
@@ -188,7 +188,8 @@ public class TrueWallE extends LinearOpMode {
                                         moveRight();
                                     }
                                 }
-                                else { // we are in the safe zone
+                                else {
+                                    // we are in the safe zone
                                     moveForwards();
                                 }
 
