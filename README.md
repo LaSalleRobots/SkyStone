@@ -11,5 +11,5 @@ Please make sure your pull request is sufficiently documented describing what al
 If you have issues or features requests please submit a github issue so we can look into it. Please make sure you put the appropriate label onto the issue.
 
 ### Useful Links
-[FTC JAVA DOC](https://ftctechnh.github.io/ftc_app/doc/javadoc/index.html)
-[Our Wiki](https://github.com/LaSalleRobots/SkyStone/wiki)
+- [FTC JAVA DOC](https://ftctechnh.github.io/ftc_app/doc/javadoc/index.html)
+- [Our Wiki](https://github.com/LaSalleRobots/SkyStone/wiki)
