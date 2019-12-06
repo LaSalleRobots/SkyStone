@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import Math;
 
 @TeleOp(name="Controller Omni", group="Linear Opmode")
 public class ControllerOmni extends LinearOpMode {
@@ -56,8 +55,8 @@ public class ControllerOmni extends LinearOpMode {
         plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
 
         //Set Directions
-        leftFront.setDirection(DcMotorSimple.Direction.BACKWARD);
-        rightFront.setDirection(DcMotorSimple.Direction.BACKWARD);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
 
@@ -70,16 +69,18 @@ public class ControllerOmni extends LinearOpMode {
         while (opModeIsActive()) {
             double y = gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
-            if (x > 0 && y < 0.25 && y > -0.25){moveRight()}
+            double x2 = gamepad1.right_stick_x;
+            if (x2 > 0) {rotateRight();}
+            else if (x2 < 0) {rotateLeft();}
+            else if (x > 0 && y < 0.25 && y > -0.25){moveRight();}
             else if (x < 0 && y < 0.25 && y > -0.25){moveLeft();}
             else if (y > 0 && x < 0.25 && x > -0.25){moveForwards();}
-            else if (y < 0 && x < 0.25 && x > -0.25){moveForwards();}
+            else if (y < 0 && x < 0.25 && x > -0.25){moveBackwards();}
 
             else if (y > 0.25 && x < -0.25){moveForwardsLeft();}
             else if (y > 0.25 && x > 0.25){moveForwardsRight();}
             else if (y < -0.25 && x < -0.25){moveBackwardsLeft();}
             else if (y < -0.25 && x > 0.25){moveBackwardsRight();}
-
             else {zeroMove();}
 
             leftFront.setPower(leftFrontPower);
@@ -103,25 +104,25 @@ public class ControllerOmni extends LinearOpMode {
     }
 
     public void moveForwards() {
-        rightFrontPower = -1;
-        rightBackPower = 1;
-
-        leftFrontPower = 1;
-        leftBackPower = -1;
-    }
-    public void moveBackwards() {
         rightFrontPower = 1;
         rightBackPower = -1;
 
         leftFrontPower = -1;
         leftBackPower = 1;
     }
+    public void moveBackwards() {
+        rightFrontPower = -1;
+        rightBackPower = 1;
+
+        leftFrontPower = 1;
+        leftBackPower = -1;
+    }
     public void moveLeft() {
         rightFrontPower = -1;
         rightBackPower = -1;
 
         leftFrontPower = -1;
-        leftBackPower = 1;
+        leftBackPower = -1;
     }
     public void moveRight() {
         rightFrontPower = 1;
@@ -130,28 +131,28 @@ public class ControllerOmni extends LinearOpMode {
         leftFrontPower = 1;
         leftBackPower = 1;
     }
-    public void moveForwardsLeft() {
+    public void moveBackwardsLeft() {
         rightFrontPower = -1;
         rightBackPower = 0;
 
         leftFrontPower = 0;
         leftBackPower = -1;
     }
-    public void moveForwardsRight() {
+    public void moveBackwardsRight() {
         rightFrontPower = 0;
         rightBackPower = 1;
 
         leftFrontPower = 1;
         leftBackPower = 0;
     }
-    public void moveBackwardsLeft() {
+    public void moveForwardsLeft() {
         rightFrontPower = 0;
         rightBackPower = -1;
 
         leftFrontPower = -1;
         leftBackPower = 0;
     }
-    public void moveBackwardsRight() {
+    public void moveForwardsRight() {
         rightFrontPower = 1;
         rightBackPower = 0;
 
