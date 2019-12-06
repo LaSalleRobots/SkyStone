@@ -76,9 +76,6 @@ public class WallEDriver extends LinearOpMode {
             else if (gamepad1.left_bumper) {toggleClaw();}
             else {zeroMove();}
 
-            if (gamepad1.right_bumper){
-                toggleClaw();
-            }
 
             leftFront.setPower(leftFrontPower);
             rightFront.setPower(rightFrontPower);
@@ -95,12 +92,12 @@ public class WallEDriver extends LinearOpMode {
 
     public void toggleClaw() {
         if (closedMover) {
-            plateGrabber.setPosition(0.8);
-            plateGrabber2.setPosition(0.2);
+            plateGrabber.setPosition(1);
+            plateGrabber2.setPosition(0);
             closedMover = false;
         } else {
-            plateGrabber.setPosition(0.2);
-            plateGrabber2.setPosition(0.8);
+            plateGrabber.setPosition(0);
+            plateGrabber2.setPosition(1);
             closedMover = true;
         }
     }
