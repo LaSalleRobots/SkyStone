@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="Wall-E Driver", group="Linear Opmode")
-public class WallEDriver extends LinearOpMode {
+@TeleOp(name="Controller Omni", group="Linear Opmode")
+public class ControllerOmni extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     //Setup Drive Motor variables
@@ -55,10 +55,10 @@ public class WallEDriver extends LinearOpMode {
         plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
 
         //Set Directions
-        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         waitForStart();
@@ -67,68 +67,99 @@ public class WallEDriver extends LinearOpMode {
         closedMover = true;
         runtime.reset();
         while (opModeIsActive()) {
-            if (gamepad1.dpad_up) {moveForwards();}
-            else if (gamepad1.dpad_down) {moveBackwards();}
-            else if (gamepad1.dpad_left) {moveLeft();}
-            else if (gamepad1.dpad_right) {moveRight();}
-            else if (gamepad1.a) {rotateLeft();}
-            else if (gamepad1.b) {rotateRight();}
-            else if (gamepad1.left_bumper) {toggleClaw();}
+            double y = gamepad1.left_stick_y;
+            double x = gamepad1.left_stick_x;
+            double x2 = gamepad1.right_stick_x;
+            if (x2 > 0) {rotateRight();}
+            else if (x2 < 0) {rotateLeft();}
+            else if (x > 0 && y < 0.25 && y > -0.25){moveRight();}
+            else if (x < 0 && y < 0.25 && y > -0.25){moveLeft();}
+            else if (y > 0 && x < 0.25 && x > -0.25){moveForwards();}
+            else if (y < 0 && x < 0.25 && x > -0.25){moveBackwards();}
+
+            else if (y > 0.25 && x < -0.25){moveForwardsLeft();}
+            else if (y > 0.25 && x > 0.25){moveForwardsRight();}
+            else if (y < -0.25 && x < -0.25){moveBackwardsLeft();}
+            else if (y < -0.25 && x > 0.25){moveBackwardsRight();}
             else {zeroMove();}
 
+            if (gamepad1.right_bumper){
+                toggleClaw();
+             }
 
             leftFront.setPower(leftFrontPower);
             rightFront.setPower(rightFrontPower);
             leftBack.setPower(leftBackPower);
             rightBack.setPower(rightBackPower);
-
-            telemetry.addData("grabber1:", plateGrabber.getPosition());
-            telemetry.addData("grabber2:", plateGrabber.getPosition());
-
-            telemetry.update();
         }
 
     }
 
     public void toggleClaw() {
-        if (closedMover) {
-            plateGrabber.setPosition(1);
-            plateGrabber2.setPosition(0);
-            closedMover = false;
-        } else {
-            plateGrabber.setPosition(0);
-            plateGrabber2.setPosition(1);
-            closedMover = true;
+        if (plateGrabber.getPosition() < 0.2) {
+            plateGrabber.setPosition(0.8);
+            plateGrabber2.setPosition(0.2);
+        } else if (plateGrabber.getPosition() > 0.8) {
+            plateGrabber.setPosition(0.2);
+            plateGrabber2.setPosition(0.8);
         }
     }
 
     public void moveForwards() {
-        rightFrontPower = -1;
+        rightFrontPower = 1;
         rightBackPower = -1;
 
         leftFrontPower = -1;
-        leftBackPower = -1;
+        leftBackPower = 1;
     }
     public void moveBackwards() {
-        rightFrontPower = 1;
-        rightBackPower = 1;
-
-        leftFrontPower = 1;
-        leftBackPower = 1;
-    }
-    public void moveLeft() {
-        rightFrontPower = 1;
-        rightBackPower = -1;
-
-        leftFrontPower = -1;
-        leftBackPower = 1;
-    }
-    public void moveRight() {
         rightFrontPower = -1;
         rightBackPower = 1;
 
         leftFrontPower = 1;
         leftBackPower = -1;
+    }
+    public void moveLeft() {
+        rightFrontPower = -1;
+        rightBackPower = -1;
+
+        leftFrontPower = -1;
+        leftBackPower = -1;
+    }
+    public void moveRight() {
+        rightFrontPower = 1;
+        rightBackPower = 1;
+
+        leftFrontPower = 1;
+        leftBackPower = 1;
+    }
+    public void moveBackwardsLeft() {
+        rightFrontPower = -1;
+        rightBackPower = 0;
+
+        leftFrontPower = 0;
+        leftBackPower = -1;
+    }
+    public void moveBackwardsRight() {
+        rightFrontPower = 0;
+        rightBackPower = 1;
+
+        leftFrontPower = 1;
+        leftBackPower = 0;
+    }
+    public void moveForwardsLeft() {
+        rightFrontPower = 0;
+        rightBackPower = -1;
+
+        leftFrontPower = -1;
+        leftBackPower = 0;
+    }
+    public void moveForwardsRight() {
+        rightFrontPower = 1;
+        rightBackPower = 0;
+
+        leftFrontPower = 0;
+        leftBackPower = 1;
     }
     public void zeroMove() {
         rightFrontPower = 0;
@@ -139,7 +170,7 @@ public class WallEDriver extends LinearOpMode {
     }
     public void rotateLeft() {
 
-        leftFrontPower = 1;
+        leftFrontPower = -1;
         rightFrontPower = -1;
         leftBackPower = 1;
         rightBackPower = 1;
@@ -148,6 +179,6 @@ public class WallEDriver extends LinearOpMode {
         leftFrontPower = 1;
         rightFrontPower = 1;
         leftBackPower = -1;
-        rightBackPower = 1;
+        rightBackPower = -1;
     }
 }
