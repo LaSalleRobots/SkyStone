@@ -59,7 +59,7 @@ public class RoboHelper {
             time = runtime.time();
         }
     }
-    public void toggleClaw() {
+    public void togglePlateGrabber() {
         if (closedMover) {
             plateGrabber.setPosition(1);
             plateGrabber2.setPosition(0);
@@ -146,13 +146,7 @@ public class RoboHelper {
         leftFrontPower = 0;
         leftBackPower = 1;
     }
-    public void zeroMove() {
-        rightFrontPower = 0;
-        rightBackPower = 0;
 
-        leftFrontPower = 0;
-        leftBackPower = 0;
-    }
     public void rotateLeft() {
 
         leftFrontPower = -1;
