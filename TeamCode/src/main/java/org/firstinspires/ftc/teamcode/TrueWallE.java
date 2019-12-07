@@ -29,34 +29,17 @@ public class TrueWallE extends LinearOpMode {
 
     private int sensorWidth = 3264;
     private double focal = (507 * 60.96) / 20.32; // Precalibrated focal length
-    private int safeZone = 100; // the safezone for getting the bricks centered
+    private int safeZone = 300; // the safezone for getting the bricks centered
 
 
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    //Setup Drive Motor variables
-    private DcMotor leftFront = null;
-    private DcMotor rightFront = null;
-    private DcMotor leftBack = null;
-    private DcMotor rightBack = null;
-
-    //Setup Arm Motor variables
-    private DcMotor armLeft = null;
-    private DcMotor armRight = null;
-
     //Setup claw servos variables
     private Servo plateGrabber = null;
     private Servo plateGrabber2 = null;
-    private Servo clawLeft = null;
-    private Servo clawRight = null;
-    private Servo clawRotate = null;
     private Servo capstoneHolder = null;
 
-    double leftFrontPower = 0.5;
-    double rightFrontPower = 0.5;
-    double leftBackPower = 0.5;
-    double rightBackPower = 0.5;
 
     boolean closedMover = false;
 
@@ -75,69 +58,17 @@ public class TrueWallE extends LinearOpMode {
         }
 
         //setup motors
-        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-        plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
-        plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
         capstoneHolder = hardwareMap.get(Servo.class, "teamMarker");
 
-        //Set Directions
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
 
-
+        RoboHelper robot = new RoboHelper(hardwareMap,runtime);
         waitForStart();
-        plateGrabber.setPosition(0);
-        plateGrabber2.setPosition(1);
         capstoneHolder.setPosition(0);
 
         closedMover = true;
         runtime.reset();
 
         if (opModeIsActive()) {
-
-            //insert move plate between
-            //begin
-            while (runtime.time() < 14){
-                if (runtime.time() < 1) {
-                    moveLeft();
-                }
-
-                if (runtime.time() < 3) {
-                    moveBackwards();
-                }
-                else if (runtime.time() < 5) {
-                    plateGrabber.setPosition(1);
-                    plateGrabber2.setPosition(0);
-
-                    zeroMove();
-                }
-                else if (runtime.time() < 7) {
-                    moveForwards();
-                }
-                else if (runtime.time() < 9) {
-                    plateGrabber.setPosition(0);
-                    plateGrabber2.setPosition(1);
-
-                    zeroMove();
-                }
-                else {
-                    moveRight();
-                }
-                applyPower();
-            }
-
-            powerOff();
-
-
-
-            //end
-            /*
-
 
             while (opModeIsActive()) {
                 if (tfod != null) {
@@ -160,31 +91,35 @@ public class TrueWallE extends LinearOpMode {
 
 
                                 //Are we not in the safe zone?
-                                if (!(boxMid+safeZone <= centerX && boxMid-safeZone >= centerX)) {
+                                if (!(boxMid + safeZone <= centerX && boxMid - safeZone >= centerX)) {
                                     // we are not in the safe zone of whatever var saveZone px
-                                    if (boxMid < centerX ) {
+                                    if (boxMid < centerX) {
+
+                                        double distancePX = centerX - boxMid;
                                         // the box is to our right so we need to move left
-                                        moveLeft();
-                                    }
-                                    else if (boxMid > centerX) {
+                                        robot.moveLeft();
+                                        robot.runFor(distancePX/1000);
+
+                                    } else if (boxMid > centerX) {
+                                        double distancePX = boxMid - centerX;
                                         // the box is to our left so we need to move right
-                                        moveRight();
+                                        robot.moveRight();
+                                        robot.runFor(distancePX/1000);
                                     }
-                                }
-                                else {
+                                } else {
                                     // we are in the safe zone
-                                    moveForwards();
+                                    robot.moveForwards();
+                                    robot.runFor(distance/51);
                                 }
 
                             }
-                            applyPower();
                             telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                             telemetry.update();
                         }
                     }
                 }
 
-            }*/
+            }
         }
 
 
@@ -217,103 +152,14 @@ public class TrueWallE extends LinearOpMode {
 
     public void toggleClaw() {
         if (closedMover) {
-            plateGrabber.setPosition(1);
-            plateGrabber2.setPosition(0);
+            plateGrabber.setPosition(0.8);
+            plateGrabber2.setPosition(0.2);
             closedMover = false;
-        } else {
-            plateGrabber.setPosition(0);
-            plateGrabber2.setPosition(1);
+        } else  {
+            plateGrabber.setPosition(0.2);
+            plateGrabber2.setPosition(0.8);
             closedMover = true;
         }
     }
 
-    public void powerOff() {
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-    }
-    public void applyPower() {
-        leftFront.setPower(leftFrontPower);
-        rightFront.setPower(rightFrontPower);
-        leftBack.setPower(leftBackPower);
-        rightBack.setPower(rightBackPower);
-    }
-
-    public void moveForwards() {
-        rightFrontPower = 1;
-        rightBackPower = -1;
-
-        leftFrontPower = -1;
-        leftBackPower = 1;
-    }
-    public void moveBackwards() {
-        rightFrontPower = -1;
-        rightBackPower = 1;
-
-        leftFrontPower = 1;
-        leftBackPower = -1;
-    }
-    public void moveLeft() {
-        rightFrontPower = -1;
-        rightBackPower = -1;
-
-        leftFrontPower = -1;
-        leftBackPower = -1;
-    }
-    public void moveRight() {
-        rightFrontPower = 1;
-        rightBackPower = 1;
-
-        leftFrontPower = 1;
-        leftBackPower = 1;
-    }
-    public void moveBackwardsLeft() {
-        rightFrontPower = -1;
-        rightBackPower = 0;
-
-        leftFrontPower = 0;
-        leftBackPower = -1;
-    }
-    public void moveBackwardsRight() {
-        rightFrontPower = 0;
-        rightBackPower = 1;
-
-        leftFrontPower = 1;
-        leftBackPower = 0;
-    }
-    public void moveForwardsLeft() {
-        rightFrontPower = 0;
-        rightBackPower = -1;
-
-        leftFrontPower = -1;
-        leftBackPower = 0;
-    }
-    public void moveForwardsRight() {
-        rightFrontPower = 1;
-        rightBackPower = 0;
-
-        leftFrontPower = 0;
-        leftBackPower = 1;
-    }
-    public void zeroMove() {
-        rightFrontPower = 0;
-        rightBackPower = 0;
-
-        leftFrontPower = 0;
-        leftBackPower = 0;
-    }
-    public void rotateLeft() {
-
-        leftFrontPower = -1;
-        rightFrontPower = -1;
-        leftBackPower = 1;
-        rightBackPower = 1;
-    }
-    public void rotateRight() {
-        leftFrontPower = 1;
-        rightFrontPower = 1;
-        leftBackPower = -1;
-        rightBackPower = -1;
-    }
 }
