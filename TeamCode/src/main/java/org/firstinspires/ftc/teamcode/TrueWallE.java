@@ -32,6 +32,7 @@ public class TrueWallE extends LinearOpMode {
     private int safeZone = 100; // the safezone for getting the bricks centered
 
 
+
     private ElapsedTime runtime = new ElapsedTime();
 
     //Setup Drive Motor variables
@@ -95,7 +96,6 @@ public class TrueWallE extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-
             //insert move plate between
             //begin
             while (runtime.time() < 14){
@@ -133,6 +133,7 @@ public class TrueWallE extends LinearOpMode {
 
             //end
             /*
+
 
             while (opModeIsActive()) {
                 if (tfod != null) {
@@ -178,6 +179,7 @@ public class TrueWallE extends LinearOpMode {
                         }
                     }
                 }
+
             }*/
         }
 

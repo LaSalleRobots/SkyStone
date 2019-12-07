@@ -76,10 +76,16 @@ public class WallEDriver extends LinearOpMode {
             else if (gamepad1.left_bumper) {toggleClaw();}
             else {zeroMove();}
 
+
             leftFront.setPower(leftFrontPower);
             rightFront.setPower(rightFrontPower);
             leftBack.setPower(leftBackPower);
             rightBack.setPower(rightBackPower);
+
+            telemetry.addData("grabber1:", plateGrabber.getPosition());
+            telemetry.addData("grabber2:", plateGrabber.getPosition());
+
+            telemetry.update();
         }
 
     }

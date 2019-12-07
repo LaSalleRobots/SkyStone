@@ -86,6 +86,7 @@ public class ControllerOmni extends LinearOpMode {
             if (gamepad1.right_bumper){
                 toggleClaw();
                 sleeP(0.1);
+
              }
 
             leftFront.setPower(leftFrontPower);
@@ -95,6 +96,7 @@ public class ControllerOmni extends LinearOpMode {
         }
 
     }
+
     public void sleeP(double sleepTime) {
         double time = runtime.time();
         double initTime = time;
@@ -103,6 +105,7 @@ public class ControllerOmni extends LinearOpMode {
         }
 
     }
+
 
     public void toggleClaw() {
         if (plateGrabber.getPosition() < 0.2) {
