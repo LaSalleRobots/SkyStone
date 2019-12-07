@@ -57,7 +57,7 @@ public class WallEAutoRight extends LinearOpMode {
     double leftBackPower = 0.5;
     double rightBackPower = 0.5;
 
-    boolean closedMover = false;
+    boolean closedMover = true;
 
     @Override
     public void runOpMode() {
@@ -91,13 +91,13 @@ public class WallEAutoRight extends LinearOpMode {
             robot.sleep(1);
             telemetry.addData("Status", "stoping");
             telemetry.update();
-            togglePlateGrabber();
+            toggleClaw();
             robot.sleep(1);
             robot.moveForwards();
-            robot.runFor(4);
-            togglePlateGrabber();
+            robot.runFor(2.5);
+            toggleClaw();
             robot.moveRight();
-            robot.runFor(4);
+            robot.runFor(2.5);
 
 
 
@@ -116,6 +116,18 @@ public class WallEAutoRight extends LinearOpMode {
         } else {
             plateGrabber.setPosition(0);
             plateGrabber2.setPosition(1);
+            closedMover = true;
+        }
+    }
+
+    public void toggleClaw() {
+        if (closedMover) {
+            plateGrabber.setPosition(0.8);
+            plateGrabber2.setPosition(0.2);
+            closedMover = false;
+        } else  {
+            plateGrabber.setPosition(0.2);
+            plateGrabber2.setPosition(0.8);
             closedMover = true;
         }
     }
