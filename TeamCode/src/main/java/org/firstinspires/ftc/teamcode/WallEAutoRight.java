@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-@Autonomous(name="Wall-E Auto Left", group="AI")
+@Autonomous(name="Wall-E Auto Red", group="AI")
 public class WallEAutoRight extends LinearOpMode {
 
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
@@ -71,10 +71,11 @@ public class WallEAutoRight extends LinearOpMode {
         capstoneHolder = hardwareMap.get(Servo.class, "teamMarker");
 
 
-        capstoneHolder.setPosition(0);
+
         waitForStart();
         runtime.reset();
         RoboHelper robot = new RoboHelper(hardwareMap, runtime);
+        capstoneHolder.setPosition(0);
         plateGrabber.setPosition(0);
         plateGrabber2.setPosition(1);
 
@@ -88,14 +89,17 @@ public class WallEAutoRight extends LinearOpMode {
             robot.moveBackwards();
             robot.runFor(2.5);
             robot.powerOff();
+            robot.sleep(1);
             telemetry.addData("Status", "stoping");
             telemetry.update();
             toggleClaw();
+            robot.sleep(1);
             robot.moveForwards();
-            robot.runFor(2.7);
+            robot.runFor(5);
             toggleClaw();
+            robot.sleep(1);
             robot.moveRight();
-            robot.runFor(2.5);
+            robot.runFor(3.14);
 
 
 
