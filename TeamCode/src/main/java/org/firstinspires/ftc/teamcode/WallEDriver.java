@@ -79,7 +79,7 @@ public class WallEDriver extends LinearOpMode {
             else if (gamepad1.left_bumper) {toggleClaw();}
             else {zeroMove();}
 
-            if (gamepad1.x) {dropMarker();}
+            if (gamepad1.a) {dropMarker();}
 
             leftFront.setPower(leftFrontPower);
             rightFront.setPower(rightFrontPower);
