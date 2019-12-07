@@ -66,29 +66,20 @@ public class WallEAutoRight extends LinearOpMode {
 
 
         //setup motors
-        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
         plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
         capstoneHolder = hardwareMap.get(Servo.class, "teamMarker");
 
-        //Set Directions
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
 
-
-        waitForStart();
-        plateGrabber.setPosition(0);
-        plateGrabber2.setPosition(1);
         capstoneHolder.setPosition(0);
-
-        closedMover = true;
+        waitForStart();
         runtime.reset();
         RoboHelper robot = new RoboHelper(hardwareMap, runtime);
+        plateGrabber.setPosition(0);
+        plateGrabber2.setPosition(1);
+
+
+
 
         if (opModeIsActive()) {
 
@@ -97,13 +88,14 @@ public class WallEAutoRight extends LinearOpMode {
             robot.moveBackwards();
             robot.runFor(2.5);
             robot.powerOff();
+            robot.sleep(1);
             telemetry.addData("Status", "stoping");
             telemetry.update();
-            robot.togglePlateGrabber();
-            robot.runFor(2);
+            togglePlateGrabber();
+            robot.sleep(1);
             robot.moveForwards();
             robot.runFor(4);
-            robot.togglePlateGrabber();
+            togglePlateGrabber();
             robot.moveRight();
             robot.runFor(4);
 
@@ -114,6 +106,18 @@ public class WallEAutoRight extends LinearOpMode {
 
 
 
+    }
+
+    public void togglePlateGrabber() {
+        if (closedMover) {
+            plateGrabber.setPosition(1);
+            plateGrabber2.setPosition(0);
+            closedMover = false;
+        } else {
+            plateGrabber.setPosition(0);
+            plateGrabber2.setPosition(1);
+            closedMover = true;
+        }
     }
 
 

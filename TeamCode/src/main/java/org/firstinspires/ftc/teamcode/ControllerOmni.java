@@ -85,7 +85,7 @@ public class ControllerOmni extends LinearOpMode {
 
             if (gamepad1.right_bumper){
                 toggleClaw();
-                sleeP(0.1);
+                sleeP(0.25);
 
              }
 
@@ -108,12 +108,14 @@ public class ControllerOmni extends LinearOpMode {
 
 
     public void toggleClaw() {
-        if (plateGrabber.getPosition() < 0.2) {
+        if (closedMover) {
             plateGrabber.setPosition(0.8);
             plateGrabber2.setPosition(0.2);
-        } else if (plateGrabber.getPosition() > 0.8) {
+            closedMover = false;
+        } else  {
             plateGrabber.setPosition(0.2);
             plateGrabber2.setPosition(0.8);
+            closedMover = true;
         }
     }
 

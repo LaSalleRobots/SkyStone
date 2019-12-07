@@ -17,8 +17,8 @@ public class RoboHelper {
     private DcMotor rightBack = null;
 
     //Setup claw servos variables
-    private Servo plateGrabber = null;
-    private Servo plateGrabber2 = null;
+    //public Servo plateGrabber = null;
+    //public Servo plateGrabber2 = null;
 
 
 
@@ -39,8 +39,8 @@ public class RoboHelper {
         this.rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         this.leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         this.rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-        this.plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
-        this.plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
+        //this.plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
+        //this.plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
 
 
         //Set Directions
@@ -59,7 +59,7 @@ public class RoboHelper {
             time = runtime.time();
         }
     }
-    public void togglePlateGrabber() {
+    /*public void togglePlateGrabber() {
         if (closedMover) {
             plateGrabber.setPosition(1);
             plateGrabber2.setPosition(0);
@@ -69,7 +69,7 @@ public class RoboHelper {
             plateGrabber2.setPosition(1);
             closedMover = true;
         }
-    }
+    }*/
 
     public void powerOff() {
         leftFront.setPower(0);
