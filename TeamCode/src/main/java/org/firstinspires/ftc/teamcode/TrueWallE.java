@@ -51,6 +51,7 @@ public class TrueWallE extends LinearOpMode {
     private Servo clawLeft = null;
     private Servo clawRight = null;
     private Servo clawRotate = null;
+    private Servo capstoneHolder = null;
 
     double leftFrontPower = 0.5;
     double rightFrontPower = 0.5;
@@ -80,6 +81,7 @@ public class TrueWallE extends LinearOpMode {
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
         plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
+        capstoneHolder = hardwareMap.get(Servo.class, "teamMarker");
 
         //Set Directions
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -91,6 +93,8 @@ public class TrueWallE extends LinearOpMode {
         waitForStart();
         plateGrabber.setPosition(0);
         plateGrabber2.setPosition(1);
+        capstoneHolder.setPosition(0);
+
         closedMover = true;
         runtime.reset();
 

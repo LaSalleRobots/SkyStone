@@ -66,6 +66,7 @@ public class WallEDriver extends LinearOpMode {
         waitForStart();
         plateGrabber.setPosition(0);
         plateGrabber2.setPosition(1);
+        capstoneHolder.setPosition(0);
         closedMover = true;
         runtime.reset();
         while (opModeIsActive()) {
