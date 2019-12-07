@@ -39,8 +39,8 @@ public class RoboHelper {
         this.rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         this.leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         this.rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-        plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
-        plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
+        this.plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
+        this.plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
 
 
         //Set Directions
