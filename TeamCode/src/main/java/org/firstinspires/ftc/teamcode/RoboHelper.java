@@ -161,4 +161,17 @@ public class RoboHelper {
         leftBackPower = -1;
         rightBackPower = -1;
     }
+
+    public void slowScanRight() {
+        leftFrontPower = 0.25;
+        rightFrontPower = 0.25;
+        leftBackPower = -0.25;
+        rightBackPower = -0.25;
+    }
+    public void slowScanLeft() {
+        leftFrontPower = -0.25;
+        rightFrontPower = -0.25;
+        leftBackPower = 0.25;
+        rightBackPower = 0.25;
+    }
 }
