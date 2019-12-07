@@ -91,18 +91,19 @@ public class RoboHelper {
     }
 
     public void moveForwards() {
-        rightFrontPower = 1;
-        rightBackPower = -1;
-
-        leftFrontPower = -1;
-        leftBackPower = 1;
-    }
-    public void moveBackwards() {
         rightFrontPower = -1;
         rightBackPower = 1;
 
         leftFrontPower = 1;
         leftBackPower = -1;
+    }
+    public void moveBackwards() {
+        rightFrontPower = 1;
+        rightBackPower = -1;
+
+        leftFrontPower = -1;
+        leftBackPower = 1;
+
     }
     public void moveLeft() {
         rightFrontPower = -1;
