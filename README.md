@@ -1,6 +1,7 @@
 ## SkyStone Code
 [![Build Status](https://travis-ci.com/LaSalleRobots/SkyStone.svg?branch=master)](https://travis-ci.com/LaSalleRobots/SkyStone)
 
+Based off of the FTC SDK provided by [FIRST-Tech-Challenge](https://github.com/FIRST-Tech-Challenge/SkyStone)
 
 ### Contribute
 Create a new branch for your idea (eg. Distance Detection) and then submit a pull request when your code is ready to be merged into master.
