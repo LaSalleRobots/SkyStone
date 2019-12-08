@@ -14,3 +14,6 @@ If you have issues or features requests please submit a github issue so we can l
 ### Useful Links
 - [FTC JAVA DOC](https://ftctechnh.github.io/ftc_app/doc/javadoc/index.html)
 - [Our Wiki](https://github.com/LaSalleRobots/SkyStone/wiki)
+- Game Manual
+  - [Part One](https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/game-manual-part-1.pdf)
+  - [Part Two](https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/game-manual-part-2.pdf)
