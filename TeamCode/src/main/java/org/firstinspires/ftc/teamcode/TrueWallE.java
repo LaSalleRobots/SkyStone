@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.android.AndroidTextToSpeech;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -43,7 +44,8 @@ public class TrueWallE extends LinearOpMode {
         if (tfod != null) {
             tfod.activate();
         }
-
+        AndroidTextToSpeech speaker = new AndroidTextToSpeech();
+        speaker.initialize();
 
 
         RoboHelper robot = new RoboHelper(hardwareMap,runtime);
@@ -71,6 +73,7 @@ public class TrueWallE extends LinearOpMode {
 
                                 if (boxMid >= 512 && boxMid <= 768) {
                                     //inside middle safezone
+                                    speaker.speak("Found Skystone. Moving forwards now!");
                                     robot.moveForwards();
                                     robot.runFor(distance/51);
                                 } else {
