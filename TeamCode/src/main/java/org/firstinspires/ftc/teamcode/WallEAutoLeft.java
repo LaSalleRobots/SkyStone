@@ -93,11 +93,11 @@ public class WallEAutoLeft extends LinearOpMode {
             telemetry.update();
             toggleClaw();
             robot.sleep(1);
-            robot.moveForwards();
+            robot.rotateLeft();
             robot.runFor(5);
             toggleClaw();
             robot.sleep(1);
-            robot.moveLeft();
+            robot.moveForwards();
             robot.runFor(3.14);
 
 
