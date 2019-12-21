@@ -94,10 +94,12 @@ public class WallEAutoRight extends LinearOpMode {
             telemetry.update();
             toggleClaw();
             robot.sleep(1);
-            robot.rotateRight();
+            robot.moveForwards();
             robot.runFor(3);
-            robot.moveLeft();
+            robot.rotateLeft();
             robot.runFor(5);
+            robot.moveBackwards();
+            robot.runFor(2);
             toggleClaw();
             robot.sleep(1);
             robot.moveForwards();
