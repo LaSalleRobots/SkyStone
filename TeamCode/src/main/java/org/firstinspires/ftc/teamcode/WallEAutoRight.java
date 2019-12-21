@@ -95,6 +95,8 @@ public class WallEAutoRight extends LinearOpMode {
             toggleClaw();
             robot.sleep(1);
             robot.rotateRight();
+            robot.runFor(3);
+            robot.moveLeft();
             robot.runFor(5);
             toggleClaw();
             robot.sleep(1);

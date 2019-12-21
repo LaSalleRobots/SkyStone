@@ -18,7 +18,8 @@ public class RoboHelperFuncTester extends LinearOpMode {
             "moveForwardsLeft",
             "moveForwardsRight",
             "rotateLeft",
-            "rotateRight"
+            "rotateRight",
+            "toggleFunc"
     };
     private double runTime = 0;
     private int index = 0;
@@ -65,6 +66,7 @@ public class RoboHelperFuncTester extends LinearOpMode {
                 else if (command.equals("moveForwardsRight")) {robot.moveForwardsRight();}
                 else if (command.equals("rotateLeft")) {robot.rotateLeft();}
                 else if (command.equals("rotateRight")) {robot.rotateRight();}
+                else if (command.equals("toggleFunc")) {robot.togglePlateGrabber();}
                 robot.runFor(runTime);
             }
 
