@@ -71,11 +71,10 @@ public class WallEAutoRight extends LinearOpMode {
         capstoneHolder = hardwareMap.get(Servo.class, "teamMarker");
 
 
-
+        capstoneHolder.setPosition(0);
         waitForStart();
         runtime.reset();
         RoboHelper robot = new RoboHelper(hardwareMap, runtime);
-        capstoneHolder.setPosition(0);
         plateGrabber.setPosition(0);
         plateGrabber2.setPosition(1);
 
@@ -85,7 +84,7 @@ public class WallEAutoRight extends LinearOpMode {
         if (opModeIsActive()) {
 
             robot.moveLeft();
-            robot.runFor(0.5);
+            robot.runFor(0.6);
             robot.moveBackwards();
             robot.runFor(2.5);
             robot.powerOff();
@@ -95,15 +94,15 @@ public class WallEAutoRight extends LinearOpMode {
             toggleClaw();
             robot.sleep(1);
             robot.moveForwards();
-            robot.runFor(3);
-            robot.rotateLeft();
-            robot.runFor(5);
+            robot.runFor(3.2);
+            robot.rotateRight();
+            robot.runFor(2.5);
             robot.moveBackwards();
             robot.runFor(2);
             toggleClaw();
             robot.sleep(1);
             robot.moveForwards();
-            robot.runFor(3.14);
+            robot.runFor(3);
 
 
 
