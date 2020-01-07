@@ -28,6 +28,7 @@ public class ControllerOmni extends LinearOpMode {
 
     //Setup claw servos variables
     private Servo plateGrabber = null;
+    private Servo thisServo = null;
     private Servo plateGrabber2 = null;
     private Servo clawLeft = null;
     private Servo clawRight = null;
@@ -39,6 +40,7 @@ public class ControllerOmni extends LinearOpMode {
     double rightBackPower = 0.5;
 
     boolean closedMover = false;
+    boolean closedMover2 = false;
 
 
     @Override
@@ -53,6 +55,7 @@ public class ControllerOmni extends LinearOpMode {
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
         plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
+        thisServo = hardwareMap.get(Servo.class, "extraServo");
 
         //Set Directions
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -87,7 +90,12 @@ public class ControllerOmni extends LinearOpMode {
                 toggleClaw();
                 sleeP(0.25);
 
-             }
+            }
+            if (gamepad1.a){
+                toggleRandomServo();
+                sleeP(0.25);
+
+            }
 
             leftFront.setPower(leftFrontPower);
             rightFront.setPower(rightFrontPower);
@@ -115,6 +123,18 @@ public class ControllerOmni extends LinearOpMode {
         } else  {
             plateGrabber.setPosition(0.2);
             plateGrabber2.setPosition(0.8);
+            closedMover = true;
+        }
+    }
+
+    public void toggleRandomServo() {
+        if (closedMover2) {
+            thisServo.setPosition(0.8);
+            thisServo.setPosition(0.2);
+            closedMover = false;
+        } else  {
+            thisServo.setPosition(0.2);
+            thisServo.setPosition(0.8);
             closedMover = true;
         }
     }
