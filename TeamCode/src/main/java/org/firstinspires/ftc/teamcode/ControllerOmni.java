@@ -67,6 +67,7 @@ public class ControllerOmni extends LinearOpMode {
         waitForStart();
         plateGrabber.setPosition(0);
         plateGrabber2.setPosition(1);
+        thisServo.setPosition(1);
         closedMover = true;
         runtime.reset();
         while (opModeIsActive()) {
@@ -95,6 +96,9 @@ public class ControllerOmni extends LinearOpMode {
                 toggleRandomServo();
                 sleeP(0.25);
 
+            }
+            if (gamepad1.b) {
+                toggleRandomServo();
             }
 
             leftFront.setPower(leftFrontPower);
@@ -129,13 +133,13 @@ public class ControllerOmni extends LinearOpMode {
 
     public void toggleRandomServo() {
         if (closedMover2) {
-            thisServo.setPosition(0.8);
-            thisServo.setPosition(0.2);
-            closedMover = false;
+            thisServo.setPosition(1);
+            thisServo.setPosition(0);
+            closedMover2 = false;
         } else  {
-            thisServo.setPosition(0.2);
-            thisServo.setPosition(0.8);
-            closedMover = true;
+            thisServo.setPosition(0);
+            thisServo.setPosition(1);
+            closedMover2 = true;
         }
     }
 

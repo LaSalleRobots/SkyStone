@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name = "Park On Line Omni Drive", group = "Autonomous")
+@Autonomous(name = "Park On Line Go Left", group = "Autonomous")
 public class ParkOnLineOmni extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -32,6 +32,7 @@ public class ParkOnLineOmni extends LinearOpMode {
     private Servo clawLeft = null;
     private Servo clawRight = null;
     private Servo clawRotate = null;
+    private Servo thisServo = null;
 
     //Main Function
     @Override
@@ -44,6 +45,7 @@ public class ParkOnLineOmni extends LinearOpMode {
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        thisServo = hardwareMap.get(Servo.class, "extraServo");
 
         //Set Directions
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -52,16 +54,6 @@ public class ParkOnLineOmni extends LinearOpMode {
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
-
-        armLeft = hardwareMap.get(DcMotor.class, "armLeft");
-        armRight = hardwareMap.get(DcMotor.class, "armRight");
-
-
-        //setup servos
-        clawLeft = hardwareMap.get(Servo.class, "clawLeft");
-        clawRight = hardwareMap.get(Servo.class, "clawRight");
-        clawRotate = hardwareMap.get(Servo.class, "clawRotate");
-
         //setup power
         double leftFrontPower = 0.5;
         double rightFrontPower = 0.5;
@@ -69,6 +61,7 @@ public class ParkOnLineOmni extends LinearOpMode {
         double rightBackPower = 0.5;
 
         waitForStart();
+        thisServo.setPosition(1);
         runtime.reset();
         while (opModeIsActive()) {
 
@@ -83,6 +76,11 @@ public class ParkOnLineOmni extends LinearOpMode {
                 moveForward = false;
                 turning = true;
                 moveRight = true;
+            }
+            else{
+                moveForward = false;
+                moveRight = false;
+                moveRight = false;
             }
 
 
@@ -111,12 +109,11 @@ public class ParkOnLineOmni extends LinearOpMode {
 
                 leftBackPower = 1;
                 rightBackPower = 1;
-            } else {
-                leftFrontPower = -1;
-                rightFrontPower = -1;
-                leftBackPower = -1;
-                rightBackPower = -1;
-
+            }else{
+                leftFrontPower = 0;
+                rightFrontPower = 0;
+                leftBackPower = 0;
+                rightBackPower = 0;
             }
             leftFront.setPower(leftFrontPower);
             rightFront.setPower(rightFrontPower);
