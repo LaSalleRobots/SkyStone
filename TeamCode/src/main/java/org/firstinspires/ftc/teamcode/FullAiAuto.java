@@ -76,9 +76,25 @@ public class FullAiAuto extends OpMode {
     public void start() {
         this.robot = new RoboHelper(hardwareMap, runtime); //Robot object
         runtime.reset();
+        double boxX = skystone.getWidth() / 2; // The mid-position for the recognized bounding box width
+        double centerX = skystone.getImageWidth() / 2; // the mid-position for the frame box width
+        double centerY = skystone.getImageHeight() / 2; // the mid-position for the frame box height
+        double boxMid = skystone.getLeft() + boxX; // Center point Horizontally
+        double distancePX = 0;
+
+        while (boxMid >= 512 && boxMid <= 768){
+            if (boxMid < 512) {
+                robot.moveLeft();
+                robot.runFor(0.05);
+            } else if (boxMid > 768) {
+                robot.moveRight();
+                robot.runFor(0.05);
+            }
+        }
         double distance = (((60.69 * focal) / skystone.getWidth()) * 0.27377245509); // Distance from position
 
-
+        robot.moveForwards();
+        robot.runDist(distance/30.48); //Convert to feet
     }
 
     /*
