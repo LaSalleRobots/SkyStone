@@ -39,6 +39,7 @@ public class FullAiAuto extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private RoboHelper robot;
 
+    private Recognition skystone;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -61,6 +62,11 @@ public class FullAiAuto extends OpMode {
         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
         if (updatedRecognitions != null) {
             telemetry.addData("# Object Detected", updatedRecognitions.size()); // How many things do we see on screen
+            for (Recognition recognition : updatedRecognitions) {
+                if (recognition.getLabel().equals("Skystone")) {
+                    skystone = recognition;
+                }
+            }
         }
     }
     /*
@@ -70,6 +76,9 @@ public class FullAiAuto extends OpMode {
     public void start() {
         this.robot = new RoboHelper(hardwareMap, runtime); //Robot object
         runtime.reset();
+        double distance = (((60.69 * focal) / skystone.getWidth()) * 0.27377245509); // Distance from position
+        
+        
     }
 
     /*

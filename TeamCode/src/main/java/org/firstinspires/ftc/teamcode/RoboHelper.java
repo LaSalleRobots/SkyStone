@@ -20,7 +20,8 @@ public class RoboHelper {
     public Servo plateGrabber = null;
     public Servo plateGrabber2 = null;
 
-
+    //
+    private double fixionCoef = 1.75;//the distance the robot goes in 1 second (in feet)
 
     private double power = 0.5;
     public double leftFrontPower = 0.5;
@@ -87,6 +88,12 @@ public class RoboHelper {
     public void runFor(double runTime) {
         applyPower();
         sleep(runTime);
+        powerOff();
+    }
+
+    public void runDist(double runningDistance) {
+        applyPower();
+        sleep(runningDistance * fixionCoef);
         powerOff();
     }
 
