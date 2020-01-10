@@ -61,6 +61,7 @@ public class FullAiAuto extends OpMode {
         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
         if (updatedRecognitions != null) {
             telemetry.addData("# Object Detected", updatedRecognitions.size()); // How many things do we see on screen
+            
         }
     }
     /*
