@@ -65,44 +65,56 @@ public class FullAiAuto extends OpMode {
      */
     @Override
     public void init_loop() {
-        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-        if (updatedRecognitions != null) {
-            telemetry.addData("# Object Detected", updatedRecognitions.size()); // How many things do we see on screen
-            for (Recognition recognition : updatedRecognitions) {
-                if (recognition.getLabel().equals("Skystone")) {
-                    skystone = recognition;
-                }
-            }
-        }
+
     }
     /*
      * Code to run ONCE when the driver hits PLAY
      */
     @Override
     public void start() {
-
         runtime.reset();
-        double distance = (((60.69 * focal) / skystone.getWidth()) * 0.27377245509); // Distance from position
-        double boxX = skystone.getWidth() / 2; // The mid-position for the recognized bounding box width
-        double boxMid = skystone.getLeft() + boxX; // Center point Horizontally
 
-        if (boxMid >= 512 && boxMid <= 768) {
-            speaker.speak("All ready setup!");
-        } else {
-            if (boxMid < (skystone.getImageWidth()/2)) {
-                robot.moveLeft();
-                robot.runFor(1);
-            } else {
-                robot.moveRight();
-                robot.runFor(1);
+        robot.moveForwards();
+        robot.runFor(1);
+        while (skystone == null && runtime.time() < 3) {
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size()); // How many things do we see on screen
+                for (Recognition recognition : updatedRecognitions) {
+                    if (recognition.getLabel().equals("Skystone")) {
+                        skystone = recognition;
+                    }
+                }
             }
         }
-        robot.moveForwards();
-        robot.runFor(3);
-        robot.rotateRight();
-        robot.runFor(1);
-        robot.moveForwards();
-        robot.runFor(3);
+        if (skystone != null) {
+            double distance = (((60.69 * focal) / skystone.getWidth()) * 0.27377245509); // Distance from position
+            double boxX = skystone.getWidth() / 2; // The mid-position for the recognized bounding box width
+            double boxMid = skystone.getLeft() + boxX; // Center point Horizontally
+
+            if (boxMid >= 512 && boxMid <= 768) {
+                speaker.speak("All ready setup!");
+            } else {
+                if (boxMid < (skystone.getImageWidth() / 2)) {
+                    robot.moveLeft();
+                    robot.runFor(0.5);
+                } else {
+                    robot.moveRight();
+                    robot.runFor(0.5);
+                }
+            }
+            robot.moveForwards();
+            robot.runFor(3);
+            robot.rotateRight();
+            robot.runFor(2);
+            robot.moveForwards();
+            robot.runFor(3);
+        } else {
+            robot.moveBackwards();
+            robot.runFor(2);
+            robot.moveLeft();
+            robot.runFor(5);
+        }
     }
 
     /*
