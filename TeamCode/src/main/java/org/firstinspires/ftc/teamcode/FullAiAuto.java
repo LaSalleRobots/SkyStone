@@ -75,7 +75,7 @@ public class FullAiAuto extends OpMode {
         runtime.reset();
 
         robot.moveForwards();
-        robot.runFor(1);
+        robot.runFor(0.78);
         while (skystone == null && runtime.time() < 3) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
