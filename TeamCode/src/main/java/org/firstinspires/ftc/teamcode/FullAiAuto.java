@@ -38,6 +38,8 @@ public class FullAiAuto extends OpMode {
     //Class Variables
     private ElapsedTime runtime = new ElapsedTime();
     private RoboHelper robot;
+    private RecordPlayer recordPlayer;
+    private AndroidTextToSpeech speaker;
 
     private Recognition skystone;
 
@@ -46,6 +48,10 @@ public class FullAiAuto extends OpMode {
      */
     @Override
     public void init() {
+        recordPlayer = new RecordPlayer(hardwareMap.appContext);
+        speaker = new AndroidTextToSpeech();
+        speaker.initialize();
+        this.robot = new RoboHelper(hardwareMap, runtime); //Robot object
         initVuforia();
         initTfod();
         tfod.activate();
@@ -74,11 +80,29 @@ public class FullAiAuto extends OpMode {
      */
     @Override
     public void start() {
-        this.robot = new RoboHelper(hardwareMap, runtime); //Robot object
+
         runtime.reset();
         double distance = (((60.69 * focal) / skystone.getWidth()) * 0.27377245509); // Distance from position
+        double boxX = skystone.getWidth() / 2; // The mid-position for the recognized bounding box width
+        double boxMid = skystone.getLeft() + boxX; // Center point Horizontally
 
-
+        if (boxMid >= 512 && boxMid <= 768) {
+            speaker.speak("All ready setup!");
+        } else {
+            if (boxMid < (skystone.getImageWidth()/2)) {
+                robot.moveLeft();
+                robot.runFor(1);
+            } else {
+                robot.moveRight();
+                robot.runFor(1);
+            }
+        }
+        robot.moveForwards();
+        robot.runFor(2);
+        robot.rotateRight();
+        robot.runFor(3);
+        robot.moveForwards();
+        robot.runFor(2);
     }
 
     /*
