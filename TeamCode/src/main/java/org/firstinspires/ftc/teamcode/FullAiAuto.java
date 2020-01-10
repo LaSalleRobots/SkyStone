@@ -38,6 +38,8 @@ public class FullAiAuto extends OpMode {
     //Class Variables
     private ElapsedTime runtime = new ElapsedTime();
     private RoboHelper robot;
+    private RecordPlayer recordPlayer;
+    private AndroidTextToSpeech speaker;
 
     private Recognition skystone;
 
@@ -46,6 +48,10 @@ public class FullAiAuto extends OpMode {
      */
     @Override
     public void init() {
+        recordPlayer = new RecordPlayer(hardwareMap.appContext);
+        speaker = new AndroidTextToSpeech();
+        speaker.initialize();
+        this.robot = new RoboHelper(hardwareMap, runtime); //Robot object
         initVuforia();
         initTfod();
         tfod.activate();
@@ -59,42 +65,56 @@ public class FullAiAuto extends OpMode {
      */
     @Override
     public void init_loop() {
-        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-        if (updatedRecognitions != null) {
-            telemetry.addData("# Object Detected", updatedRecognitions.size()); // How many things do we see on screen
-            for (Recognition recognition : updatedRecognitions) {
-                if (recognition.getLabel().equals("Skystone")) {
-                    skystone = recognition;
-                }
-            }
-        }
+
     }
     /*
      * Code to run ONCE when the driver hits PLAY
      */
     @Override
     public void start() {
-        this.robot = new RoboHelper(hardwareMap, runtime); //Robot object
         runtime.reset();
-        double boxX = skystone.getWidth() / 2; // The mid-position for the recognized bounding box width
-        double centerX = skystone.getImageWidth() / 2; // the mid-position for the frame box width
-        double centerY = skystone.getImageHeight() / 2; // the mid-position for the frame box height
-        double boxMid = skystone.getLeft() + boxX; // Center point Horizontally
-        double distancePX = 0;
-
-        while (boxMid >= 512 && boxMid <= 768){
-            if (boxMid < 512) {
-                robot.moveLeft();
-                robot.runFor(0.05);
-            } else if (boxMid > 768) {
-                robot.moveRight();
-                robot.runFor(0.05);
-            }
-        }
-        double distance = (((60.69 * focal) / skystone.getWidth()) * 0.27377245509); // Distance from position
 
         robot.moveForwards();
-        robot.runDist(distance/30.48); //Convert to feet
+        robot.runFor(0.78);
+        while (skystone == null && runtime.time() < 3) {
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size()); // How many things do we see on screen
+                for (Recognition recognition : updatedRecognitions) {
+                    if (recognition.getLabel().equals("Skystone")) {
+                        skystone = recognition;
+                    }
+                }
+            }
+        }
+        if (skystone != null) {
+            double distance = (((60.69 * focal) / skystone.getWidth()) * 0.27377245509); // Distance from position
+            double boxX = skystone.getWidth() / 2; // The mid-position for the recognized bounding box width
+            double boxMid = skystone.getLeft() + boxX + 200; // Center point Horizontally
+
+            if (boxMid >= 512 && boxMid <= 768) {
+                speaker.speak("All ready setup!");
+            } else {
+                if (boxMid < (skystone.getImageWidth() / 2)) {
+                    robot.moveLeft();
+                    robot.runFor(0.35);
+                } else {
+                    robot.moveRight();
+                    robot.runFor(0.35);
+                }
+            }
+            robot.moveForwards();
+            robot.runFor(3);
+            robot.rotateRight();
+            robot.runFor(2);
+            robot.moveForwards();
+            robot.runFor(3);
+        } else {
+            robot.moveBackwards();
+            robot.runFor(2);
+            robot.moveLeft();
+            robot.runFor(5);
+        }
     }
 
     /*

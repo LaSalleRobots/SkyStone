@@ -12,7 +12,7 @@ Please make sure your pull request is sufficiently documented describing what al
 If you have issues or features requests please submit a github issue so we can look into it. Please make sure you put the appropriate label onto the issue.
 
 ### Useful Links
-- [FTC JAVA DOC](https://ftctechnh.github.io/ftc_app/doc/javadoc/index.html)
+- [FTC JAVA DOC](https://first-tech-challenge.github.io/SkyStone/doc/javadoc/index.html)
 - [Our Wiki](https://github.com/LaSalleRobots/SkyStone/wiki)
 - Game Manual
   - [Part One](https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/game-manual-part-1.pdf)
