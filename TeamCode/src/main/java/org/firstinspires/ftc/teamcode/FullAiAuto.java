@@ -97,10 +97,10 @@ public class FullAiAuto extends OpMode {
             } else {
                 if (boxMid < (skystone.getImageWidth() / 2)) {
                     robot.moveLeft();
-                    robot.runFor(0.5);
+                    robot.runFor(0.35);
                 } else {
                     robot.moveRight();
-                    robot.runFor(0.5);
+                    robot.runFor(0.35);
                 }
             }
             robot.moveForwards();
