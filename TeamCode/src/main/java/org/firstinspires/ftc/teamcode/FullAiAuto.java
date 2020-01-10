@@ -90,7 +90,7 @@ public class FullAiAuto extends OpMode {
         if (skystone != null) {
             double distance = (((60.69 * focal) / skystone.getWidth()) * 0.27377245509); // Distance from position
             double boxX = skystone.getWidth() / 2; // The mid-position for the recognized bounding box width
-            double boxMid = skystone.getLeft() + boxX; // Center point Horizontally
+            double boxMid = skystone.getLeft() + boxX + 200; // Center point Horizontally
 
             if (boxMid >= 512 && boxMid <= 768) {
                 speaker.speak("All ready setup!");
