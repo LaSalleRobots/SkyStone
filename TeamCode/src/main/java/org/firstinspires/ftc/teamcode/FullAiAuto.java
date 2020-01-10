@@ -98,11 +98,11 @@ public class FullAiAuto extends OpMode {
             }
         }
         robot.moveForwards();
-        robot.runFor(2);
-        robot.rotateRight();
         robot.runFor(3);
+        robot.rotateRight();
+        robot.runFor(1);
         robot.moveForwards();
-        robot.runFor(2);
+        robot.runFor(3);
     }
 
     /*
