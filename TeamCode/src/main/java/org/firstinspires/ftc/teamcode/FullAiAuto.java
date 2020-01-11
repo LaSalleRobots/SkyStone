@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -17,7 +18,7 @@ import org.firstinspires.ftc.robotcore.external.android.AndroidTextToSpeech;
 import java.util.List;
 
 @Autonomous(name="Wall-E Full Auto", group="AI")
-public class FullAiAuto extends OpMode {
+public class FullAiAuto extends LinearOpMode {
 
 
     //Ai/CV Variables
@@ -43,11 +44,9 @@ public class FullAiAuto extends OpMode {
 
     private Recognition skystone;
 
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
+
     @Override
-    public void init() {
+    public void runOpMode() {
         recordPlayer = new RecordPlayer(hardwareMap.appContext);
         speaker = new AndroidTextToSpeech();
         speaker.initialize();
@@ -56,22 +55,9 @@ public class FullAiAuto extends OpMode {
         initTfod();
         tfod.activate();
         telemetry.addData("Status", "Initialized");
-    }
 
+        waitForStart();
 
-
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
-    @Override
-    public void init_loop() {
-
-    }
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
-    @Override
-    public void start() {
         runtime.reset();
 
         robot.moveForwards();
@@ -91,45 +77,83 @@ public class FullAiAuto extends OpMode {
             double distance = (((60.69 * focal) / skystone.getWidth()) * 0.27377245509); // Distance from position
             double boxX = skystone.getWidth() / 2; // The mid-position for the recognized bounding box width
             double boxMid = skystone.getLeft() + boxX + 200; // Center point Horizontally
-
+            robot.rotateLeft();
+            robot.runFor(.02);
             if (boxMid >= 512 && boxMid <= 768) {
                 speaker.speak("All ready setup!");
+                //following for after it has detected brick in center
+
+                robot.moveForwards();
+                robot.runFor(1.25);
+                robot.rotateRight();
+                robot.runFor(2);
+                robot.moveForwards();
+                robot.runFor(1);
+                robot.rotateRight();
+                robot.runFor(1.38);
+                robot.moveForwards();
+                robot.runFor(3.5);
+                robot.moveBackwards();
+                robot.runFor(1.2);
             } else {
-                if (boxMid < (skystone.getImageWidth() / 2)) {
-                    robot.moveLeft();
-                    robot.runFor(0.35);
-                } else {
+
+
+                if (boxMid > (skystone.getImageWidth() / 2)) {
                     robot.moveRight();
-                    robot.runFor(0.35);
+                    robot.runFor(0.4);
+                    //this is for after it has chosen to move right
+                    robot.moveForwards();
+                    robot.runFor(1.25);
+                    robot.rotateRight();
+                    robot.runFor(2);
+                    robot.moveForwards();
+                    robot.runFor(1);
+                    robot.rotateRight();
+                    robot.runFor(1.36);
+                    robot.moveForwards();
+                    robot.runFor(4.5);
+                    robot.moveBackwards();
+                    robot.runFor(1.2);
+                } else {
+                    robot.moveLeft();
+                    robot.runFor(0.5);
+                    // this is for brick one, after the robot has moved left
+                    robot.moveForwards();
+                    robot.runFor(1.25);
+                    robot.rotateRight();
+                    robot.runFor(2);
+                    robot.moveForwards();
+                    robot.runFor(1);
+                    robot.rotateRight();
+                    robot.runFor(1.36);
+                    robot.moveForwards();
+                    robot.runFor(3);
+                    robot.moveBackwards();
+                    robot.runFor(1.2);
                 }
             }
+
+        } else {
+            robot.moveLeft();
+            robot.runFor(0.5);
+            // this is for brick one, after the robot has moved left
             robot.moveForwards();
-            robot.runFor(3);
+            robot.runFor(1.25);
             robot.rotateRight();
             robot.runFor(2);
             robot.moveForwards();
+            robot.runFor(1);
+            robot.rotateRight();
+            robot.runFor(1.36);
+            robot.moveForwards();
             robot.runFor(3);
-        } else {
             robot.moveBackwards();
-            robot.runFor(2);
-            robot.moveLeft();
-            robot.runFor(5);
+            robot.runFor(1.2);
         }
+
+
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
-    @Override
-    public void loop() {
-    }
-
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
-    @Override
-    public void stop() {
-    }
 
 
 
