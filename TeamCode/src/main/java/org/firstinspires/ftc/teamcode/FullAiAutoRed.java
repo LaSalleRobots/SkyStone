@@ -18,7 +18,7 @@ import org.firstinspires.ftc.robotcore.external.android.AndroidTextToSpeech;
 import java.util.List;
 
 @Autonomous(name="Wall-E Full Auto Red", group="AI")
-public class FullAiAutoBlue extends LinearOpMode {
+public class FullAiAutoRed extends LinearOpMode {
 
 
     //Ai/CV Variables
