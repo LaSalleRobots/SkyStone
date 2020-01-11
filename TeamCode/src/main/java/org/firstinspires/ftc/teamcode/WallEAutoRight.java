@@ -84,25 +84,25 @@ public class WallEAutoRight extends LinearOpMode {
         if (opModeIsActive()) {
 
             robot.moveLeft();
-            robot.runFor(0.6);
+            robot.runFor(0.6*0.75);
             robot.moveBackwards();
-            robot.runFor(2.5);
+            robot.runFor(2.5*0.75);
             robot.powerOff();
             robot.sleep(1);
             telemetry.addData("Status", "stoping");
             telemetry.update();
             toggleClaw();
-            robot.sleep(1);
+            robot.sleep(1*0.75);
             robot.moveForwards();
-            robot.runFor(3.2);
+            robot.runFor(3.2*0.75);
             robot.rotateRight();
-            robot.runFor(2.5);
+            robot.runFor(2.5*0.75);
             robot.moveBackwards();
-            robot.runFor(2);
+            robot.runFor(2*0.75);
             toggleClaw();
-            robot.sleep(1);
+            robot.sleep(1*0.75);
             robot.moveForwards();
-            robot.runFor(3);
+            robot.runFor(3*0.75);
 
 
 
@@ -135,7 +135,7 @@ public class WallEAutoRight extends LinearOpMode {
             plateGrabber2.setPosition(0.8);
             closedMover = true;
         }
-    }
+    } 
 
 
 

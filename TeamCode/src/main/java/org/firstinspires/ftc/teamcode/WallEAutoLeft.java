@@ -84,9 +84,9 @@ public class WallEAutoLeft extends LinearOpMode {
         if (opModeIsActive()) {
 
             robot.moveRight();
-            robot.runFor(0.6);
+            robot.runFor(0.6*0.75);
             robot.moveBackwards();
-            robot.runFor(2.5);
+            robot.runFor(2.5*0.75);
             robot.powerOff();
             robot.sleep(1);
             telemetry.addData("Status", "stoping");
@@ -94,15 +94,15 @@ public class WallEAutoLeft extends LinearOpMode {
             toggleClaw();
             robot.sleep(1);
             robot.moveForwards();
-            robot.runFor(3.2);
+            robot.runFor(3.2*0.75);
             robot.rotateLeft();
-            robot.runFor(2.5);
+            robot.runFor(2.5*0.75);
             robot.moveBackwards();
-            robot.runFor(2);
+            robot.runFor(2*0.75);
             toggleClaw();
-            robot.sleep(1);
+            robot.sleep(1*0.75);
             robot.moveForwards();
-            robot.runFor(3);
+            robot.runFor(3*0.75);
 
 
 
