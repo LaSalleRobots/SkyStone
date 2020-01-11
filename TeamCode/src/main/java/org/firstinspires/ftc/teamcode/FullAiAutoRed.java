@@ -134,7 +134,7 @@ public class FullAiAutoRed extends LinearOpMode {
             }
 
         } else {
-            robot.moveRigght();
+            robot.moveRight();
             robot.runFor(0.5);
             // this is for brick one, after the robot has moved left
             robot.moveForwards();
