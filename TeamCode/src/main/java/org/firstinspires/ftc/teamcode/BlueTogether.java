@@ -17,8 +17,8 @@ import org.firstinspires.ftc.robotcore.external.android.AndroidTextToSpeech;
 
 import java.util.List;
 
-@Autonomous(name="Blue AI", group="AI")
-public class FullAiAutoBlue extends LinearOpMode {
+@Autonomous(name="Blue AI + Plate", group="AI")
+public class BlueTogether extends LinearOpMode {
 
 
     //Ai/CV Variables
@@ -42,6 +42,10 @@ public class FullAiAutoBlue extends LinearOpMode {
     private RecordPlayer recordPlayer;
     private AndroidTextToSpeech speaker;
 
+    private Servo plateGrabber;
+    private Servo plateGrabber2;
+    private boolean closedMover = true;
+
     private Recognition skystone;
 
 
@@ -51,6 +55,8 @@ public class FullAiAutoBlue extends LinearOpMode {
         speaker = new AndroidTextToSpeech();
         speaker.initialize();
         this.robot = new RoboHelper(hardwareMap, runtime); //Robot object
+        this.plateGrabber = robot.plateGrabber;
+        this.plateGrabber2 = robot.plateGrabber2;
         initVuforia();
         initTfod();
         tfod.activate();
@@ -81,85 +87,97 @@ public class FullAiAutoBlue extends LinearOpMode {
             robot.runFor(.02);
             if (boxMid >= 512 && boxMid <= 768) {
                 speaker.speak("All ready setup!");
-                telemetry.addLine("Center");
-                telemetry.update();
                 //following for after it has detected brick in center
 
                 robot.moveForwards();
-                robot.runFor(1.35);
+                robot.runFor(1.4);
                 robot.rotateRight();
-                robot.runFor(2.1);
+                robot.runFor(2);
                 robot.moveForwards();
                 robot.runFor(1);
                 robot.rotateRight();
-                robot.runFor(1.38);
+                robot.runFor(1.4);
                 robot.moveForwards();
                 robot.runFor(3.5);
-                robot.moveBackwards();
-                robot.runFor(1.2);
+
             } else {
 
 
                 if (boxMid > (skystone.getImageWidth() / 2)) {
-                    telemetry.addLine("Right");
-                    telemetry.update();
                     robot.moveRight();
                     robot.runFor(0.4);
                     //this is for after it has chosen to move right
                     robot.moveForwards();
-                    robot.runFor(1.35);
+                    robot.runFor(1.4);
                     robot.rotateRight();
-                    robot.runFor(2.1);
+                    robot.runFor(2);
                     robot.moveForwards();
                     robot.runFor(1);
                     robot.rotateRight();
-                    robot.runFor(1.36);
+                    robot.runFor(1.4);
                     robot.moveForwards();
                     robot.runFor(4.5);
-                    robot.moveBackwards();
-                    robot.runFor(1.2);
+
                 } else {
-                    telemetry.addLine("left");
-                    telemetry.update();
                     robot.moveLeft();
                     robot.runFor(0.5);
                     // this is for brick one, after the robot has moved left
                     robot.moveForwards();
-                    robot.runFor(1.35);
+                    robot.runFor(1.4);
                     robot.rotateRight();
-                    robot.runFor(2.1);
+                    robot.runFor(2);
                     robot.moveForwards();
                     robot.runFor(1);
                     robot.rotateRight();
-                    robot.runFor(1.36);
+                    robot.runFor(1.4);
                     robot.moveForwards();
                     robot.runFor(3);
-                    robot.moveBackwards();
-                    robot.runFor(1.2);
+
                 }
             }
 
         } else {
-            telemetry.addLine("failsafe");
-            telemetry.update();
-            //failsafe, didnt detect
             robot.moveLeft();
             robot.runFor(0.5);
             // this is for brick one, after the robot has moved left
             robot.moveForwards();
-            robot.runFor(1.35);
+            robot.runFor(1.4);
             robot.rotateRight();
-            robot.runFor(2.1);
+            robot.runFor(2);
             robot.moveForwards();
             robot.runFor(1);
             robot.rotateRight();
-            robot.runFor(1.36);
+            robot.runFor(1.4);
             robot.moveForwards();
             robot.runFor(3);
-            robot.moveBackwards();
-            robot.runFor(1.2);
-        }
 
+        } //end of ai part
+
+
+        //beginning of plate code
+        robot.rotateRight();
+        robot.runFor(2.25);
+        robot.moveBackwards();
+        robot.runFor(1);
+        robot.rotateRight();
+        robot.runFor(1.2);
+
+        robot.moveBackwards();
+        robot.runFor(2.2);
+
+        robot.sleep(.5);
+        telemetry.addData("Status", "stoping");
+        telemetry.update();
+        toggleClaw();
+        robot.sleep(1.2);
+
+
+        robot.moveForwards();
+        robot.runFor(4);
+        toggleClaw();
+        robot.sleep(1*0.75);
+        robot.moveLeft();
+        robot.runFor(3*0.75);
 
     }
 
@@ -192,5 +210,17 @@ public class FullAiAutoBlue extends LinearOpMode {
         tfodParameters.minimumConfidence = 0.8;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+
+    public void toggleClaw() {
+        if (closedMover) {
+            plateGrabber.setPosition(0.8);
+            plateGrabber2.setPosition(0.2);
+            closedMover = false;
+        } else  {
+            plateGrabber.setPosition(0.2);
+            plateGrabber2.setPosition(0.8);
+            closedMover = true;
+        }
     }
 }

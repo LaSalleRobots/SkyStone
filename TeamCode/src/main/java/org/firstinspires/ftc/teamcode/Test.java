@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 ;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 ;
 import org.firstinspires.ftc.robotcore.external.android.AndroidTextToSpeech;
 ;
+@Disabled
 @Autonomous(name="HELLO JPY", group="JPY")
 public class Test extends LinearOpMode {
 ;

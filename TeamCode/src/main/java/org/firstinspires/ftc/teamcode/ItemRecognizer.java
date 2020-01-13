@@ -31,7 +31,7 @@ import org.firstinspires.ftc.teamcode.RecordPlayer;
  * is explained below.
  */
 @Autonomous(name = "Concept: TensorFlow Object Detection", group = "Autonomous")
-//@Disabled
+@Disabled
 public class ItemRecognizer extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";

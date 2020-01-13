@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.android.AndroidTextToSpeech;
 
 import java.util.List;
 
-@Autonomous(name="Wall-E Full Auto Red", group="AI")
+@Autonomous(name="Red AI", group="AI")
 public class FullAiAutoRed extends LinearOpMode {
 
 
@@ -84,13 +84,13 @@ public class FullAiAutoRed extends LinearOpMode {
                 //following for after it has detected brick in center
 
                 robot.moveForwards();
-                robot.runFor(1.25);
+                robot.runFor(1.25*1.1);
                 robot.rotateLeft();
                 robot.runFor(2);
                 robot.moveForwards();
                 robot.runFor(1);
                 robot.rotateLeft();
-                robot.runFor(1.38);
+                robot.runFor(1.2);
                 robot.moveForwards();
                 robot.runFor(3.5);
                 robot.moveBackwards();
@@ -99,7 +99,7 @@ public class FullAiAutoRed extends LinearOpMode {
 
 
                 if (boxMid > (skystone.getImageWidth() / 2)) {
-                    robot.moveLeft();
+                    robot.moveRight();
                     robot.runFor(0.4);
                     //this is for after it has chosen to move right
                     robot.moveForwards();
@@ -109,13 +109,13 @@ public class FullAiAutoRed extends LinearOpMode {
                     robot.moveForwards();
                     robot.runFor(1);
                     robot.rotateLeft();
-                    robot.runFor(1.36);
+                    robot.runFor(1.2);
                     robot.moveForwards();
                     robot.runFor(4.5);
                     robot.moveBackwards();
                     robot.runFor(1.2);
                 } else {
-                    robot.moveRight();
+                    robot.moveLeft();
                     robot.runFor(0.5);
                     // this is for brick one, after the robot has moved left
                     robot.moveForwards();
@@ -125,7 +125,7 @@ public class FullAiAutoRed extends LinearOpMode {
                     robot.moveForwards();
                     robot.runFor(1);
                     robot.rotateLeft();
-                    robot.runFor(1.36);
+                    robot.runFor(1.2);
                     robot.moveForwards();
                     robot.runFor(3);
                     robot.moveBackwards();
@@ -134,17 +134,17 @@ public class FullAiAutoRed extends LinearOpMode {
             }
 
         } else {
-            robot.moveRight();
+            robot.moveLeft();
             robot.runFor(0.5);
             // this is for brick one, after the robot has moved left
             robot.moveForwards();
             robot.runFor(1.25);
-            robot.rotateLeft();
+            robot.rotateRight();
             robot.runFor(2);
             robot.moveForwards();
             robot.runFor(1);
             robot.rotateLeft();
-            robot.runFor(1.36);
+            robot.runFor(1.3);
             robot.moveForwards();
             robot.runFor(3);
             robot.moveBackwards();

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-@Autonomous(name="Wall-E Auto Blue", group="AI")
+@Autonomous(name="Blue Plate Only", group="AI")
 public class WallEAutoLeft extends LinearOpMode {
 
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
@@ -84,25 +84,21 @@ public class WallEAutoLeft extends LinearOpMode {
         if (opModeIsActive()) {
 
             robot.moveRight();
-            robot.runFor(0.6*0.75);
+            robot.runFor(0.6);
             robot.moveBackwards();
-            robot.runFor(2.5*0.75);
+            robot.runFor(2.5*0.8);
             robot.powerOff();
             robot.sleep(1);
             telemetry.addData("Status", "stoping");
             telemetry.update();
             toggleClaw();
-            robot.sleep(1);
+            robot.sleep(1.2);
             robot.moveForwards();
             robot.runFor(3.2*0.75);
-            robot.rotateLeft();
-            robot.runFor(2.5*0.75);
-            robot.moveBackwards();
-            robot.runFor(2*0.75);
             toggleClaw();
             robot.sleep(1*0.75);
-            robot.moveForwards();
-            robot.runFor(3*0.75);
+            robot.moveLeft();
+            robot.runFor(2.5);
 
 
 
