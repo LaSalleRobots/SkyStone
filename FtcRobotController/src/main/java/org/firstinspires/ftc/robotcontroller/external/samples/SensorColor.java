@@ -32,7 +32,6 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
-
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -54,7 +53,6 @@ import com.qualcomm.robotcore.hardware.SwitchableLight;
 @TeleOp(name = "Sensor: Color", group = "Sensor")
 @Disabled
 public class SensorColor extends LinearOpMode {
-
   /** The colorSensor field will contain a reference to our color sensor hardware object */
   NormalizedColorSensor colorSensor;
   /** The relativeLayout field is used to aid in providing interesting visual feedback
@@ -72,12 +70,19 @@ public class SensorColor extends LinearOpMode {
    * block around the main, core logic, and an easy way to make that all clear was to separate
    * the former from the latter in separate methods.
    */
-  @Override public void runOpMode() throws InterruptedException {
-
+  @Override
+  public void runOpMode() throws InterruptedException {
     // Get a reference to the RelativeLayout so we can later change the background
     // color of the Robot Controller app to match the hue detected by the RGB sensor.
-    int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-    relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+    int relativeLayoutId = hardwareMap
+      .appContext.getResources()
+      .getIdentifier(
+        "RelativeLayout",
+        "id",
+        hardwareMap.appContext.getPackageName()
+      );
+    relativeLayout =
+      ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
     try {
       runSample(); // actually execute the sample
@@ -86,16 +91,18 @@ public class SensorColor extends LinearOpMode {
       // as pure white, but it's too much work to dig out what actually was used, and this is good
       // enough to at least make the screen reasonable again.
       // Set the panel back to the default color
-      relativeLayout.post(new Runnable() {
-        public void run() {
-          relativeLayout.setBackgroundColor(Color.WHITE);
+      relativeLayout.post(
+        new Runnable() {
+
+          public void run() {
+            relativeLayout.setBackgroundColor(Color.WHITE);
+          }
         }
-      });
-      }
+      );
+    }
   }
 
   protected void runSample() throws InterruptedException {
-
     // values is a reference to the hsvValues array.
     float[] hsvValues = new float[3];
     final float values[] = hsvValues;
@@ -110,7 +117,7 @@ public class SensorColor extends LinearOpMode {
     // If possible, turn the light on in the beginning (it might already be on anyway,
     // we just make sure it is if we can).
     if (colorSensor instanceof SwitchableLight) {
-      ((SwitchableLight)colorSensor).enableLight(true);
+      ((SwitchableLight) colorSensor).enableLight(true);
     }
 
     // Wait for the start button to be pressed.
@@ -126,7 +133,7 @@ public class SensorColor extends LinearOpMode {
         // If the button is (now) down, then toggle the light
         if (bCurrState) {
           if (colorSensor instanceof SwitchableLight) {
-            SwitchableLight light = (SwitchableLight)colorSensor;
+            SwitchableLight light = (SwitchableLight) colorSensor;
             light.enableLight(!light.isLightOn());
           }
         }
@@ -142,24 +149,27 @@ public class SensorColor extends LinearOpMode {
        * @see <a href="http://infohost.nmt.edu/tcc/help/pubs/colortheory/web/hsv.html">HSV</a>*/
 
       Color.colorToHSV(colors.toColor(), hsvValues);
-      telemetry.addLine()
-              .addData("H", "%.3f", hsvValues[0])
-              .addData("S", "%.3f", hsvValues[1])
-              .addData("V", "%.3f", hsvValues[2]);
-      telemetry.addLine()
-              .addData("a", "%.3f", colors.alpha)
-              .addData("r", "%.3f", colors.red)
-              .addData("g", "%.3f", colors.green)
-              .addData("b", "%.3f", colors.blue);
+      telemetry
+        .addLine()
+        .addData("H", "%.3f", hsvValues[0])
+        .addData("S", "%.3f", hsvValues[1])
+        .addData("V", "%.3f", hsvValues[2]);
+      telemetry
+        .addLine()
+        .addData("a", "%.3f", colors.alpha)
+        .addData("r", "%.3f", colors.red)
+        .addData("g", "%.3f", colors.green)
+        .addData("b", "%.3f", colors.blue);
 
       /** We also display a conversion of the colors to an equivalent Android color integer.
        * @see Color */
       int color = colors.toColor();
-      telemetry.addLine("raw Android color: ")
-              .addData("a", "%02x", Color.alpha(color))
-              .addData("r", "%02x", Color.red(color))
-              .addData("g", "%02x", Color.green(color))
-              .addData("b", "%02x", Color.blue(color));
+      telemetry
+        .addLine("raw Android color: ")
+        .addData("a", "%02x", Color.alpha(color))
+        .addData("r", "%02x", Color.red(color))
+        .addData("g", "%02x", Color.green(color))
+        .addData("b", "%02x", Color.blue(color));
 
       // Balance the colors. The values returned by getColors() are normalized relative to the
       // maximum possible values that the sensor can measure. For example, a sensor might in a
@@ -171,30 +181,42 @@ public class SensorColor extends LinearOpMode {
       // intensities of the colors are likely what is most interesting. Here, for example, we boost
       // the signal on the colors while maintaining their relative balance so as to give more
       // vibrant visual feedback on the robot controller visual display.
-      float max = Math.max(Math.max(Math.max(colors.red, colors.green), colors.blue), colors.alpha);
-      colors.red   /= max;
+      float max = Math.max(
+        Math.max(Math.max(colors.red, colors.green), colors.blue),
+        colors.alpha
+      );
+      colors.red /= max;
       colors.green /= max;
-      colors.blue  /= max;
+      colors.blue /= max;
       color = colors.toColor();
 
-      telemetry.addLine("normalized color:  ")
-              .addData("a", "%02x", Color.alpha(color))
-              .addData("r", "%02x", Color.red(color))
-              .addData("g", "%02x", Color.green(color))
-              .addData("b", "%02x", Color.blue(color));
+      telemetry
+        .addLine("normalized color:  ")
+        .addData("a", "%02x", Color.alpha(color))
+        .addData("r", "%02x", Color.red(color))
+        .addData("g", "%02x", Color.green(color))
+        .addData("b", "%02x", Color.blue(color));
       telemetry.update();
 
       // convert the RGB values to HSV values.
-      Color.RGBToHSV(Color.red(color), Color.green(color), Color.blue(color), hsvValues);
+      Color.RGBToHSV(
+        Color.red(color),
+        Color.green(color),
+        Color.blue(color),
+        hsvValues
+      );
 
       // change the background color to match the color detected by the RGB sensor.
       // pass a reference to the hue, saturation, and value array as an argument
       // to the HSVToColor method.
-      relativeLayout.post(new Runnable() {
-        public void run() {
-          relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
+      relativeLayout.post(
+        new Runnable() {
+
+          public void run() {
+            relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
+          }
         }
-      });
+      );
     }
   }
 }

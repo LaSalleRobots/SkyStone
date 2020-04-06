@@ -8,26 +8,25 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Disabled
-@Autonomous(name="MotorEncoding", group = "Linear OpMode")
+@Autonomous(name = "MotorEncoding", group = "Linear OpMode")
 public class MotorEncoding extends LinearOpMode {
-    public DcMotor aMotor = null;
+  public DcMotor aMotor = null;
 
+  @Override
+  public void runOpMode() {
+    telemetry.addData("Status", "Initialized");
+    telemetry.update();
 
-    @Override
-    public void runOpMode() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+    aMotor = hardwareMap.get(DcMotor.class, "motor");
+    aMotor.setDirection(DcMotor.Direction.FORWARD);
 
-        aMotor = hardwareMap.get(DcMotor.class, "motor");
-        aMotor.setDirection(DcMotor.Direction.FORWARD);
+    double cpm = 1440;
+    double gearRatio = 60;
+    double diameter = 8;
+    int cpcm = (int) ((cpm * gearRatio) / (diameter * Math.PI));
 
-        double cpm = 1440;
-        double gearRatio = 60;
-        double diameter = 8;
-        int cpcm = (int)((cpm * gearRatio) / (diameter * Math.PI));
-
-        waitForStart();
-        aMotor.setPower(1);
-        aMotor.setTargetPosition(cpcm * 100);
-    }
+    waitForStart();
+    aMotor.setPower(1);
+    aMotor.setTargetPosition(cpcm * 100);
+  }
 }

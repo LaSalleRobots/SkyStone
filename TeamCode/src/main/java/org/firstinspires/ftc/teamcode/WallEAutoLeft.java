@@ -6,133 +6,112 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-import java.util.List;
-
-@Autonomous(name="Blue Plate Only", group="AI")
+@Autonomous(name = "Blue Plate Only", group = "AI")
 public class WallEAutoLeft extends LinearOpMode {
+  private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
+  private static final String LABEL_FIRST_ELEMENT = "Stone";
+  private static final String LABEL_SECOND_ELEMENT = "Skystone";
+  private static final String VUFORIA_KEY =
+    "ATEunI3/////AAABmTcVGyhDpk/vjQi7sL+G3bkNZLIZNtw/qLByk8N+aFHflTAH7VSKoR4Cmzmgq62zIwg4ijmn/bzp1aCFu3u3S2aGfK0fBzUmddZV8n1+vO2sA4RRALRfeGnv/5UWQHXcqPg1Jz3yysRBhu4ur0g7FadQJq0sTfcoWWsELgQYAeFwsZSl+ktrswOc+SUyhrlJUDJijBL4y2kH4/3aeGYsQhQRVW/0EvSmbPuwMa+6Yo7u1f13PKEOdPWbJYybeGPjybwKrptzgTyNLhSoFqIFiUA8Ft1UD9IalVhGlEsHy6KBcWkvCxGJZBvANancvdTJ0O2Ux2pYsAllxQ+h2oR925ND/oeK5Mgno13LfBKkrm2B";
+  private VuforiaLocalizer vuforia;
+  private TFObjectDetector tfod;
 
-    private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
-    private static final String LABEL_FIRST_ELEMENT = "Stone";
-    private static final String LABEL_SECOND_ELEMENT = "Skystone";
-    private static final String VUFORIA_KEY =
-            "ATEunI3/////AAABmTcVGyhDpk/vjQi7sL+G3bkNZLIZNtw/qLByk8N+aFHflTAH7VSKoR4Cmzmgq62zIwg4ijmn/bzp1aCFu3u3S2aGfK0fBzUmddZV8n1+vO2sA4RRALRfeGnv/5UWQHXcqPg1Jz3yysRBhu4ur0g7FadQJq0sTfcoWWsELgQYAeFwsZSl+ktrswOc+SUyhrlJUDJijBL4y2kH4/3aeGYsQhQRVW/0EvSmbPuwMa+6Yo7u1f13PKEOdPWbJYybeGPjybwKrptzgTyNLhSoFqIFiUA8Ft1UD9IalVhGlEsHy6KBcWkvCxGJZBvANancvdTJ0O2Ux2pYsAllxQ+h2oR925ND/oeK5Mgno13LfBKkrm2B";
-    private VuforiaLocalizer vuforia;
-    private TFObjectDetector tfod;
+  private int sensorWidth = 3264;
+  private double focal = (507 * 60.96) / 20.32; // Precalibrated focal length
+  private int safeZone = 100; // the safezone for getting the bricks centered
 
+  private ElapsedTime runtime = new ElapsedTime();
 
-    private int sensorWidth = 3264;
-    private double focal = (507 * 60.96) / 20.32; // Precalibrated focal length
-    private int safeZone = 100; // the safezone for getting the bricks centered
+  //Setup Drive Motor variables
+  private DcMotor leftFront = null;
+  private DcMotor rightFront = null;
+  private DcMotor leftBack = null;
+  private DcMotor rightBack = null;
 
+  //Setup Arm Motor variables
+  private DcMotor armLeft = null;
+  private DcMotor armRight = null;
 
-    private ElapsedTime runtime = new ElapsedTime();
+  //Setup claw servos variables
+  private Servo plateGrabber = null;
+  private Servo plateGrabber2 = null;
+  private Servo clawLeft = null;
+  private Servo clawRight = null;
+  private Servo clawRotate = null;
+  private Servo capstoneHolder = null;
 
-    //Setup Drive Motor variables
-    private DcMotor leftFront = null;
-    private DcMotor rightFront = null;
-    private DcMotor leftBack = null;
-    private DcMotor rightBack = null;
+  double leftFrontPower = 0.5;
+  double rightFrontPower = 0.5;
+  double leftBackPower = 0.5;
+  double rightBackPower = 0.5;
 
-    //Setup Arm Motor variables
-    private DcMotor armLeft = null;
-    private DcMotor armRight = null;
+  boolean closedMover = true;
 
-    //Setup claw servos variables
-    private Servo plateGrabber = null;
-    private Servo plateGrabber2 = null;
-    private Servo clawLeft = null;
-    private Servo clawRight = null;
-    private Servo clawRotate = null;
-    private Servo capstoneHolder = null;
+  @Override
+  public void runOpMode() {
+    telemetry.addData("Status", "Initalized");
+    telemetry.update();
 
-    double leftFrontPower = 0.5;
-    double rightFrontPower = 0.5;
-    double leftBackPower = 0.5;
-    double rightBackPower = 0.5;
+    //setup motors
+    plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
+    plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
+    capstoneHolder = hardwareMap.get(Servo.class, "teamMarker");
 
-    boolean closedMover = true;
+    capstoneHolder.setPosition(0);
+    waitForStart();
+    runtime.reset();
+    RoboHelper robot = new RoboHelper(hardwareMap, runtime);
+    plateGrabber.setPosition(0);
+    plateGrabber2.setPosition(1);
 
-    @Override
-    public void runOpMode() {
-        telemetry.addData("Status", "Initalized");
-        telemetry.update();
-
-
-        //setup motors
-        plateGrabber = hardwareMap.get(Servo.class, "plateGrabber");
-        plateGrabber2 = hardwareMap.get(Servo.class, "plateGrabber2");
-        capstoneHolder = hardwareMap.get(Servo.class, "teamMarker");
-
-
-        capstoneHolder.setPosition(0);
-        waitForStart();
-        runtime.reset();
-        RoboHelper robot = new RoboHelper(hardwareMap, runtime);
-        plateGrabber.setPosition(0);
-        plateGrabber2.setPosition(1);
-
-
-
-
-        if (opModeIsActive()) {
-
-            robot.moveRight();
-            robot.runFor(0.6);
-            robot.moveBackwards();
-            robot.runFor(2.5*0.8);
-            robot.powerOff();
-            robot.sleep(1);
-            telemetry.addData("Status", "stoping");
-            telemetry.update();
-            toggleClaw();
-            robot.sleep(1.2);
-            robot.moveForwards();
-            robot.runFor(3.2*0.75);
-            toggleClaw();
-            robot.sleep(1*0.75);
-            robot.moveLeft();
-            robot.runFor(2.5);
-
-
-
-        }
-
-
-
-
+    if (opModeIsActive()) {
+      robot.moveRight();
+      robot.runFor(0.6);
+      robot.moveBackwards();
+      robot.runFor(2.5 * 0.8);
+      robot.powerOff();
+      robot.sleep(1);
+      telemetry.addData("Status", "stoping");
+      telemetry.update();
+      toggleClaw();
+      robot.sleep(1.2);
+      robot.moveForwards();
+      robot.runFor(3.2 * 0.75);
+      toggleClaw();
+      robot.sleep(1 * 0.75);
+      robot.moveLeft();
+      robot.runFor(2.5);
     }
+  }
 
-    public void togglePlateGrabber() {
-        if (closedMover) {
-            plateGrabber.setPosition(1);
-            plateGrabber2.setPosition(0);
-            closedMover = false;
-        } else {
-            plateGrabber.setPosition(0);
-            plateGrabber2.setPosition(1);
-            closedMover = true;
-        }
+  public void togglePlateGrabber() {
+    if (closedMover) {
+      plateGrabber.setPosition(1);
+      plateGrabber2.setPosition(0);
+      closedMover = false;
+    } else {
+      plateGrabber.setPosition(0);
+      plateGrabber2.setPosition(1);
+      closedMover = true;
     }
+  }
 
-    public void toggleClaw() {
-        if (closedMover) {
-            plateGrabber.setPosition(0.8);
-            plateGrabber2.setPosition(0.2);
-            closedMover = false;
-        } else  {
-            plateGrabber.setPosition(0.2);
-            plateGrabber2.setPosition(0.8);
-            closedMover = true;
-        }
+  public void toggleClaw() {
+    if (closedMover) {
+      plateGrabber.setPosition(0.8);
+      plateGrabber2.setPosition(0.2);
+      closedMover = false;
+    } else {
+      plateGrabber.setPosition(0.2);
+      plateGrabber2.setPosition(0.8);
+      closedMover = true;
     }
-
-
-
+  }
 }
