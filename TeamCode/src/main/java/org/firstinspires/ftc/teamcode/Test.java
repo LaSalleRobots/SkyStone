@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.android.AndroidTextToSpeech;
 @Disabled
 @Autonomous(name = "HELLO JPY", group = "JPY")
 public class Test extends LinearOpMode {
+
   @Override
   public void runOpMode() {
     telemetry.addData("status", "inited from jpy");
