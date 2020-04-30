@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
-
+/* 2019-2020 FTC Robotics Skystone 
+ * (c) 2019-2020 La Salle Robotics 
+ * Developed for the Skystone competition
+ */ 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
